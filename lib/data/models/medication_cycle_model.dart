@@ -1,5 +1,3 @@
-
-// 복약 사이클 모델
 import 'package:yakunstructuretest/data/models/medication_detail_model.dart';
 import 'package:yakunstructuretest/data/models/medication_group_model.dart';
 

@@ -3,11 +3,97 @@ import 'package:yakunstructuretest/data/models/medication_detail_model.dart';
 import 'package:yakunstructuretest/data/models/medication_model.dart';
 import 'package:yakunstructuretest/data/models/medication_record_model.dart';
 
+class ScheduleItem {
+  final String id;
+  final ScheduleType type;
+  final String title;
+  final String subtitle;
+  final DateTime scheduledDate;
+  final double? progress;
+  final Map<String, dynamic>? additionalData;
+
+  ScheduleItem({
+    required this.id,
+    required this.type,
+    required this.title,
+    required this.subtitle,
+    required this.scheduledDate,
+    this.progress,
+    this.additionalData,
+  });
+
+  int get daysRemaining {
+    final now = DateTime.now();
+    final difference = scheduledDate.difference(DateTime(now.year, now.month, now.day));
+    return difference.inDays;
+  }
+
+  String get daysRemainingText {
+    final days = daysRemaining;
+    if (days < 0) return "D+${(-days)}";
+    if (days == 0) return "D-Day";
+    return "D-$days";
+  }
+}
+
 class HomeProvider with ChangeNotifier {
   List<dynamic> get urgentNotifications => [];
   List<dynamic> get upcomingSchedules => [
-    {'title': '서울대학교병원 내원', 'date': 'D-8'},
-    {'title': '처방전 갱신', 'date': 'D-15'},
+    {
+      "id": "hospital_001",
+      "type": "hospital",
+      "title": "서울대학교병원 내원",
+      "subtitle": "정신건강의학과 - 김민수 교수",
+      "scheduledDate": "2025-06-07",
+      "progress": "0.3",
+      "additionalData": {
+        'department': '정신건강의학과',
+        'doctor': '김민수',
+        'appointmentTime': '14:30',
+      },
+    },
+    {
+      "id": "medication_001",
+      "type": "medication",
+      "title": "정신과 약물 복약 그룹",
+      "subtitle": "9월 16일자 처방",
+      "scheduledDate": "2025-05-23",
+      "additionalData": {
+        'medications': [
+          {
+            "name": "제프람",
+            "dose": "5mg",
+            "frequency": "1일 1회",
+            "imageUrl": "assets/pills/zepram.png",
+       //     "color": Colors.blue.shade200,
+          },
+          {
+            "name": "알프람",
+            "dose": "0.25mg",
+            "frequency": "필요시",
+            "imageUrl": "assets/pills/alpram.png",
+         //   "color": Colors.green.shade200,
+          },
+          {
+            "name": "부스피론",
+            "dose": "5mg",
+            "frequency": "1일 2회",
+            "imageUrl": "assets/pills/buspirone.png",
+          //  "color": Colors.orange.shade200,
+          },
+        ],
+        'cycleNumber': "24",
+        'remainingDays': "12",
+      },
+    },
+    {
+      "id": "prescription_001",
+      "type": "prescription",
+      "title": "처방전 갱신 예정",
+      "subtitle": "다음 진료 예약 필요",
+      "scheduledDate": "2025-05-15",
+      "progress": "0.8",
+    },
   ];
 
   Future<void> loadHomeData() async {
@@ -19,6 +105,72 @@ class HomeProvider with ChangeNotifier {
   }
 }
 
+enum ScheduleType {
+  hospital,
+  medication,
+  appointment,
+  prescription
+}
+
+// RecordType 열거형 정의
+enum RecordType {
+  taken,    // 복용 완료
+  missed,   // 복용 누락
+  skipped,  // 의도적 건너뜀
+  delayed,  // 지연 복용
+  partial,  // 부분 복용
+}
+
+// RecordType 확장 메서드
+extension RecordTypeExtension on RecordType {
+  String get displayName {
+    switch (this) {
+      case RecordType.taken:
+        return '복용 완료';
+      case RecordType.missed:
+        return '복용 누락';
+      case RecordType.skipped:
+        return '건너뜀';
+      case RecordType.delayed:
+        return '지연 복용';
+      case RecordType.partial:
+        return '부분 복용';
+    }
+  }
+
+  String get apiValue {
+    switch (this) {
+      case RecordType.taken:
+        return 'TAKEN';
+      case RecordType.missed:
+        return 'MISSED';
+      case RecordType.skipped:
+        return 'SKIPPED';
+      case RecordType.delayed:
+        return 'DELAYED';
+      case RecordType.partial:
+        return 'PARTIAL';
+    }
+  }
+
+  static RecordType fromApiValue(String value) {
+    switch (value) {
+      case 'TAKEN':
+        return RecordType.taken;
+      case 'MISSED':
+        return RecordType.missed;
+      case 'SKIPPED':
+        return RecordType.skipped;
+      case 'DELAYED':
+        return RecordType.delayed;
+      case 'PARTIAL':
+        return RecordType.partial;
+      default:
+        return RecordType.taken;
+    }
+  }
+}
+
 class MedicationProvider with ChangeNotifier {
   List<MedicationDetailModel> _todayMedications = [];
   List<MedicationRecordModel> _medicationRecords = [];
@@ -27,6 +179,23 @@ class MedicationProvider with ChangeNotifier {
   List<MedicationDetailModel> get todayMedications => _todayMedications;
   List<MedicationRecordModel> get medicationRecords => _medicationRecords;
   bool get isLoading => _isLoading;
+
+  // 누락된 메서드 1: 모든 복약 기록 가져오기
+  List<MedicationRecordModel> getAllMedicationRecords() {
+    return _medicationRecords;
+  }
+
+  // 누락된 메서드 2: ID로 약물 상세 정보 가져오기
+  MedicationDetailModel? getMedicationDetailById(int medicationDetailId) {
+    try {
+      return _todayMedications.firstWhere(
+            (detail) => detail.id == medicationDetailId,
+      );
+    } catch (e) {
+      // firstWhere가 요소를 찾지 못한 경우
+      return null;
+    }
+  }
 
   TodayMedicationStatus get todayMedicationStatus {
     final today = DateTime.now();
@@ -42,7 +211,7 @@ class MedicationProvider with ChangeNotifier {
     final pending = total - taken - missed;
 
     return TodayMedicationStatus(
-      taken: taken > 0 ? taken : 3, // 테스트 데이터
+      taken: taken > 0 ? taken : 3,
       missed: missed > 0 ? missed : 1,
       pending: pending > 0 ? pending : 2,
       completionRate: total > 0 ? taken / total : 0.6,

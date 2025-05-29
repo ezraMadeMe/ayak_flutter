@@ -12,4 +12,5 @@ class AppTextStyles {
   static final TextStyle subtitle = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
   static final TextStyle heading = TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
   static final TextStyle caption = TextStyle(fontSize: 12, color: Colors.grey);
+  static final TextStyle body = TextStyle(fontSize: 12, color: Colors.grey);
 }

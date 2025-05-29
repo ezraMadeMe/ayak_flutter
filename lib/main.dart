@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:yakunstructuretest/presentation/providers/analytics_provider.dart';
 import 'package:yakunstructuretest/presentation/providers/auth_provider.dart';
 import 'package:yakunstructuretest/presentation/providers/medication_provider.dart';
+import 'package:yakunstructuretest/presentation/providers/search_provider.dart';
 import 'package:yakunstructuretest/presentation/screens/home/HomeScreen.dart';
+import 'package:yakunstructuretest/presentation/screens/medication/MedicationScreen.dart';
+import 'package:yakunstructuretest/presentation/screens/search/SearchScreen.dart';
+import 'package:yakunstructuretest/presentation/screens/statistics/StatisticsScreen.dart';
 
 
 // 테스트용 메인 함수
@@ -12,15 +18,18 @@ void main() {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => MedicationProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
+        ChangeNotifierProvider(create: (_) => AnalyticsProvider()),
+        ChangeNotifierProvider(create: (_) => SearchProvider()),
       ],
       child: MaterialApp(
         home: HomeScreen(),
         routes: {
-          '/search': (context) => Scaffold(appBar: AppBar(title: Text('검색')), body: Center(child: Text('검색 화면'))),
+          '/search': (context) => Scaffold(appBar: AppBar(title: Text('검색')), body: SearchScreen()),
           '/schedule': (context) => Scaffold(appBar: AppBar(title: Text('일정')), body: Center(child: Text('일정 화면'))),
           '/medication-group': (context) => Scaffold(appBar: AppBar(title: Text('그룹 등록')), body: Center(child: Text('그룹 등록 화면'))),
           '/medication-cycle': (context) => Scaffold(appBar: AppBar(title: Text('사이클 등록')), body: Center(child: Text('사이클 등록 화면'))),
-          '/medication-record': (context) => Scaffold(appBar: AppBar(title: Text('복약 기록')), body: Center(child: Text('복약 기록 화면'))),
+          '/medication-record': (context) => Scaffold(appBar: AppBar(title: Text('복약 기록')), body: MedicationScreen()),
+          '/statistics': (context) => Scaffold(appBar: AppBar(title: Text('처방 통계')), body: StatisticsScreen()),
         },
       ),
     ),

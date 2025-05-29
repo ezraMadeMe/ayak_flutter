@@ -1,5 +1,7 @@
 
 // 복약 그룹 모델
+import 'package:yakunstructuretest/data/models/user_model.dart';
+
 class MedicationGroupModel {
   final String groupId;
   final String groupName;
