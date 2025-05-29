@@ -1,0 +1,1030 @@
+{
+  "4월_9월_복약기록": [
+    {
+      "date": "4월1일",
+      "fullDate": "2024-04-01",
+      "cycle": 7,
+      "visitInterval": 15,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 15,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 10,
+          "frequency": 1,
+          "days": 15,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "환인쿠에타핀",
+          "ingredient": "쿠에타핀",
+          "ingredientEn": "Quetiapine",
+          "dose": 25,
+          "frequency": 1,
+          "days": 15,
+          "category": "비정형항정신병약",
+          "type": "regular"
+        },
+        {
+          "name": "부스피론",
+          "ingredient": "부스피론",
+          "ingredientEn": "Buspirone",
+          "dose": 5,
+          "frequency": 2,
+          "days": 15,
+          "category": "항불안제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "부스피론 추가됨. 알프람 의존성 우려로 다른 약물 시도함. 처음 며칠간 어지러움 있었으나 점차 적응됨. 강박 증상은 여전히 있음."
+    },
+    {
+      "date": "4월16일",
+      "fullDate": "2024-04-16",
+      "cycle": 8,
+      "visitInterval": 15,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 15,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 15,
+          "frequency": 1,
+          "days": 15,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "환인쿠에타핀",
+          "ingredient": "쿠에타핀",
+          "ingredientEn": "Quetiapine",
+          "dose": 50,
+          "frequency": 1,
+          "days": 15,
+          "category": "비정형항정신병약",
+          "type": "regular"
+        },
+        {
+          "name": "부스피론",
+          "ingredient": "부스피론",
+          "ingredientEn": "Buspirone",
+          "dose": 10,
+          "frequency": 2,
+          "days": 15,
+          "category": "항불안제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "제프람과 쿠에타핀 증량함. 수면의 질이 좋아짐. 부스피론도 증량되어 불안감이 조금 더 완화됨. 아직 강박적 사고는 남아있지만 빈도 감소함."
+    },
+    {
+      "date": "5월1일",
+      "fullDate": "2024-05-01",
+      "cycle": 9,
+      "visitInterval": 15,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 15,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 20,
+          "frequency": 1,
+          "days": 15,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "부스피론",
+          "ingredient": "부스피론",
+          "ingredientEn": "Buspirone",
+          "dose": 15,
+          "frequency": 2,
+          "days": 15,
+          "category": "항불안제",
+          "type": "regular"
+        },
+        {
+          "name": "아리피프라졸",
+          "ingredient": "아리피프라졸",
+          "ingredientEn": "Aripiprazole",
+          "dose": 2,
+          "frequency": 1,
+          "days": 15,
+          "category": "비정형항정신병약",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "쿠에타핀 중단하고 아리피프라졸로 교체함. 체중증가 우려 때문임. 제프람 최대용량까지 증량함. 전반적으로 기분이 안정됨. 강박증상도 많이 호전됨."
+    },
+    {
+      "date": "5월16일",
+      "fullDate": "2024-05-16",
+      "cycle": 10,
+      "visitInterval": 15,
+      "medications": [
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 20,
+          "frequency": 1,
+          "days": 15,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "부스피론",
+          "ingredient": "부스피론",
+          "ingredientEn": "Buspirone",
+          "dose": 15,
+          "frequency": 2,
+          "days": 15,
+          "category": "항불안제",
+          "type": "regular"
+        },
+        {
+          "name": "아리피프라졸",
+          "ingredient": "아리피프라졸",
+          "ingredientEn": "Aripiprazole",
+          "dose": 5,
+          "frequency": 1,
+          "days": 15,
+          "category": "비정형항정신병약",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "알프람 중단함. 의존성 우려와 증상 호전으로 끊기로 함. 아리피프라졸 증량함. 처음 며칠간 가벼운 불안감 있었으나 곧 적응됨. 일상생활이 많이 편해짐."
+    },
+    {
+      "date": "6월1일",
+      "fullDate": "2024-06-01",
+      "cycle": 11,
+      "visitInterval": 7,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.5,
+          "frequency": 3,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.5,
+          "frequency": 2,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 14
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 20,
+          "frequency": 1,
+          "days": 7,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "미르타자핀",
+          "ingredient": "미르타자핀",
+          "ingredientEn": "Mirtazapine",
+          "dose": 15,
+          "frequency": 1,
+          "days": 7,
+          "category": "사환계항우울제",
+          "type": "regular"
+        },
+        {
+          "name": "졸피뎀",
+          "ingredient": "졸피뎀",
+          "ingredientEn": "Zolpidem",
+          "dose": 10,
+          "frequency": 1,
+          "days": 7,
+          "category": "수면제",
+          "type": "regular"
+        },
+        {
+          "name": "프라조신",
+          "ingredient": "프라조신",
+          "ingredientEn": "Prazosin",
+          "dose": 1,
+          "frequency": 1,
+          "days": 7,
+          "category": "알파차단제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "교통사고 후 극심한 악화됨. 알프람 재시작하고 용량 증량함. 아리피프라졸과 부스피론 중단함. 미르타자핀과 프라조신 추가됨. 악몽과 수면장애 심함. 식욕 완전히 없어짐."
+    },
+    {
+      "date": "6월8일",
+      "fullDate": "2024-06-08",
+      "cycle": 12,
+      "visitInterval": 7,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.5,
+          "frequency": 3,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.5,
+          "frequency": 2,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 14
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 20,
+          "frequency": 1,
+          "days": 7,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "미르타자핀",
+          "ingredient": "미르타자핀",
+          "ingredientEn": "Mirtazapine",
+          "dose": 30,
+          "frequency": 1,
+          "days": 7,
+          "category": "사환계항우울제",
+          "type": "regular"
+        },
+        {
+          "name": "졸피뎀",
+          "ingredient": "졸피뎀",
+          "ingredientEn": "Zolpidem",
+          "dose": 10,
+          "frequency": 1,
+          "days": 7,
+          "category": "수면제",
+          "type": "regular"
+        },
+        {
+          "name": "프라조신",
+          "ingredient": "프라조신",
+          "ingredientEn": "Prazosin",
+          "dose": 2,
+          "frequency": 1,
+          "days": 7,
+          "category": "알파차단제",
+          "type": "regular"
+        },
+        {
+          "name": "트라조돈",
+          "ingredient": "트라조돈",
+          "ingredientEn": "Trazodone",
+          "dose": 50,
+          "frequency": 1,
+          "days": 7,
+          "category": "항우울제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "미르타자핀과 프라조신 증량함. 트라조돈 추가됨. PRN 알프람 하루에 4-5번까지 먹게 됨. 체중 4kg 감소함. 기억력과 집중력 현저히 저하됨. 악몽 빈도는 줄어듦."
+    },
+    {
+      "date": "6월15일",
+      "fullDate": "2024-06-15",
+      "cycle": 13,
+      "visitInterval": 7,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.5,
+          "frequency": 3,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.5,
+          "frequency": 2,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 14
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 20,
+          "frequency": 1,
+          "days": 7,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "미르타자핀",
+          "ingredient": "미르타자핀",
+          "ingredientEn": "Mirtazapine",
+          "dose": 30,
+          "frequency": 1,
+          "days": 7,
+          "category": "사환계항우울제",
+          "type": "regular"
+        },
+        {
+          "name": "프라조신",
+          "ingredient": "프라조신",
+          "ingredientEn": "Prazosin",
+          "dose": 2,
+          "frequency": 1,
+          "days": 7,
+          "category": "알파차단제",
+          "type": "regular"
+        },
+        {
+          "name": "트라조돈",
+          "ingredient": "트라조돈",
+          "ingredientEn": "Trazodone",
+          "dose": 100,
+          "frequency": 1,
+          "days": 7,
+          "category": "항우울제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "졸피뎀 중단하고 트라조돈 증량함. 수면의 질은 조금 나아짐. 미르타자핀 효과로 식욕이 조금씩 돌아옴. 하지만 여전히 인지기능 저하와 기억력 문제 심함."
+    },
+    {
+      "date": "6월22일",
+      "fullDate": "2024-06-22",
+      "cycle": 14,
+      "visitInterval": 7,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.5,
+          "frequency": 2,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 2,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 14
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 20,
+          "frequency": 1,
+          "days": 7,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "미르타자핀",
+          "ingredient": "미르타자핀",
+          "ingredientEn": "Mirtazapine",
+          "dose": 30,
+          "frequency": 1,
+          "days": 7,
+          "category": "사환계항우울제",
+          "type": "regular"
+        },
+        {
+          "name": "프라조신",
+          "ingredient": "프라조신",
+          "ingredientEn": "Prazosin",
+          "dose": 3,
+          "frequency": 1,
+          "days": 7,
+          "category": "알파차단제",
+          "type": "regular"
+        },
+        {
+          "name": "트라조돈",
+          "ingredient": "트라조돈",
+          "ingredientEn": "Trazodone",
+          "dose": 100,
+          "frequency": 1,
+          "days": 7,
+          "category": "항우울제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "알프람 정규 복용 감량 시작함. PRN도 0.25로 감량함. 프라조신 증량함. 조금씩 호전되는 느낌 있음. 식사량도 점차 늘어남. 인지기능은 여전히 문제됨."
+    },
+    {
+      "date": "6월29일",
+      "fullDate": "2024-06-29",
+      "cycle": 15,
+      "visitInterval": 7,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 2,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 2,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 14
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 15,
+          "frequency": 1,
+          "days": 7,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "미르타자핀",
+          "ingredient": "미르타자핀",
+          "ingredientEn": "Mirtazapine",
+          "dose": 30,
+          "frequency": 1,
+          "days": 7,
+          "category": "사환계항우울제",
+          "type": "regular"
+        },
+        {
+          "name": "프라조신",
+          "ingredient": "프라조신",
+          "ingredientEn": "Prazosin",
+          "dose": 3,
+          "frequency": 1,
+          "days": 7,
+          "category": "알파차단제",
+          "type": "regular"
+        },
+        {
+          "name": "트라조돈",
+          "ingredient": "트라조돈",
+          "ingredientEn": "Trazodone",
+          "dose": 75,
+          "frequency": 1,
+          "days": 7,
+          "category": "항우울제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "알프람 지속 감량함. 제프람도 조금 감량함. 트라조돈도 감량함. 전반적으로 안정화되어가는 중임. PRN 사용 빈도도 줄어듦. 체중은 2kg 정도 회복됨."
+    },
+    {
+      "date": "7월6일",
+      "fullDate": "2024-07-06",
+      "cycle": 16,
+      "visitInterval": 7,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 2,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 14
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 15,
+          "frequency": 1,
+          "days": 7,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "미르타자핀",
+          "ingredient": "미르타자핀",
+          "ingredientEn": "Mirtazapine",
+          "dose": 15,
+          "frequency": 1,
+          "days": 7,
+          "category": "사환계항우울제",
+          "type": "regular"
+        },
+        {
+          "name": "프라조신",
+          "ingredient": "프라조신",
+          "ingredientEn": "Prazosin",
+          "dose": 2,
+          "frequency": 1,
+          "days": 7,
+          "category": "알파차단제",
+          "type": "regular"
+        },
+        {
+          "name": "트라조돈",
+          "ingredient": "트라조돈",
+          "ingredientEn": "Trazodone",
+          "dose": 50,
+          "frequency": 1,
+          "days": 7,
+          "category": "항우울제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "모든 약물 감량 지속함. 알프람 정규 복용을 하루 1회로 줄임. 미르타자핀도 절반으로 감량함. 수면의 질은 양호하게 유지됨. 식욕도 정상 수준으로 회복됨."
+    },
+    {
+      "date": "7월13일",
+      "fullDate": "2024-07-13",
+      "cycle": 17,
+      "visitInterval": 7,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 7
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 10,
+          "frequency": 1,
+          "days": 7,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "미르타자핀",
+          "ingredient": "미르타자핀",
+          "ingredientEn": "Mirtazapine",
+          "dose": 15,
+          "frequency": 1,
+          "days": 7,
+          "category": "사환계항우울제",
+          "type": "regular"
+        },
+        {
+          "name": "프라조신",
+          "ingredient": "프라조신",
+          "ingredientEn": "Prazosin",
+          "dose": 1,
+          "frequency": 1,
+          "days": 7,
+          "category": "알파차단제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "트라조돈 중단함. PRN 알프람 용량도 줄임. 제프람도 10mg로 감량함. 프라조신도 감량함. 악몽은 거의 없어짐. 인지기능도 서서히 회복되는 느낌 있음."
+    },
+    {
+      "date": "7월20일",
+      "fullDate": "2024-07-20",
+      "cycle": 18,
+      "visitInterval": 7,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 7
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 10,
+          "frequency": 1,
+          "days": 7,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "미르타자핀",
+          "ingredient": "미르타자핀",
+          "ingredientEn": "Mirtazapine",
+          "dose": 15,
+          "frequency": 1,
+          "days": 7,
+          "category": "사환계항우울제",
+          "type": "regular"
+        },
+        {
+          "name": "모다피닐",
+          "ingredient": "모다피닐",
+          "ingredientEn": "Modafinil",
+          "dose": 100,
+          "frequency": 1,
+          "days": 7,
+          "category": "각성제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "프라조신 중단하고 모다피닐 추가됨. 인지기능 회복을 위한 시도임. 집중력과 기억력이 조금씩 나아지는 느낌 있음. 하지만 오후에 약간의 불안감 생김."
+    },
+    {
+      "date": "7월27일",
+      "fullDate": "2024-07-27",
+      "cycle": 19,
+      "visitInterval": 7,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 7
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 10,
+          "frequency": 1,
+          "days": 7,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "미르타자핀",
+          "ingredient": "미르타자핀",
+          "ingredientEn": "Mirtazapine",
+          "dose": 7.5,
+          "frequency": 1,
+          "days": 7,
+          "category": "사환계항우울제",
+          "type": "regular"
+        },
+        {
+          "name": "모다피닐",
+          "ingredient": "모다피닐",
+          "ingredientEn": "Modafinil",
+          "dose": 50,
+          "frequency": 1,
+          "days": 7,
+          "category": "각성제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "미르타자핀 절반으로 감량함. 모다피닐도 절반으로 감량함. 오후 불안감이 줄어듦. 체중은 정상 수준으로 완전 회복됨. 인지기능도 많이 개선됨."
+    },
+    {
+      "date": "8월3일",
+      "fullDate": "2024-08-03",
+      "cycle": 20,
+      "visitInterval": 7,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 7
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 10,
+          "frequency": 1,
+          "days": 7,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "부스피론",
+          "ingredient": "부스피론",
+          "ingredientEn": "Buspirone",
+          "dose": 10,
+          "frequency": 2,
+          "days": 7,
+          "category": "항불안제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "미르타자핀과 모다피닐 중단함. 부스피론 재시작함. 수면 패턴이 자연스러워짐. 인지기능은 80% 정도 회복된 느낌임. PRN 사용도 일주일에 2-3회로 줄어듦."
+    },
+    {
+      "date": "8월10일",
+      "fullDate": "2024-08-10",
+      "cycle": 21,
+      "visitInterval": 7,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 7,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 7
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 10,
+          "frequency": 1,
+          "days": 7,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "부스피론",
+          "ingredient": "부스피론",
+          "ingredientEn": "Buspirone",
+          "dose": 15,
+          "frequency": 2,
+          "days": 7,
+          "category": "항불안제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "부스피론 증량함. 전반적으로 안정적인 상태 유지됨. 일상생활에 큰 지장 없음. 강박적 사고도 거의 사라짐. 업무 복귀도 고려해볼 만한 수준임."
+    },
+    {
+      "date": "8월17일",
+      "fullDate": "2024-08-17",
+      "cycle": 22,
+      "visitInterval": 15,
+      "medications": [
+        {
+          "name": "알프람",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 15,
+          "category": "벤조디아제핀",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 15,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 15
+        },
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 10,
+          "frequency": 1,
+          "days": 15,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "부스피론",
+          "ingredient": "부스피론",
+          "ingredientEn": "Buspirone",
+          "dose": 10,
+          "frequency": 2,
+          "days": 15,
+          "category": "항불안제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "내원 간격을 2주로 늘림. 부스피론 조금 감량함. 안정적인 호전 상태 지속됨. 업무에 복귀함. 스트레스 관리만 잘하면 될 것 같음."
+    },
+    {
+      "date": "9월1일",
+      "fullDate": "2024-09-01",
+      "cycle": 23,
+      "visitInterval": 15,
+      "medications": [
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 10,
+          "frequency": 1,
+          "days": 15,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 15,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 10
+        },
+        {
+          "name": "부스피론",
+          "ingredient": "부스피론",
+          "ingredientEn": "Buspirone",
+          "dose": 10,
+          "frequency": 2,
+          "days": 15,
+          "category": "항불안제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "알프람 정규 복용 중단함. PRN도 10정으로 줄임. 거의 정상 생활 수준 회복됨. PRN은 예상치 못한 스트레스 상황에서만 사용함. 인지기능도 거의 완전 회복됨."
+    },
+    {
+      "date": "9월16일",
+      "fullDate": "2024-09-16",
+      "cycle": 24,
+      "visitInterval": 15,
+      "medications": [
+        {
+          "name": "제프람",
+          "ingredient": "에스시탈로프람",
+          "ingredientEn": "Escitalopram",
+          "dose": 5,
+          "frequency": 1,
+          "days": 15,
+          "category": "SSRI",
+          "type": "regular"
+        },
+        {
+          "name": "알프람 PRN",
+          "ingredient": "알프라졸람",
+          "ingredientEn": "Alprazolam",
+          "dose": 0.25,
+          "frequency": 1,
+          "days": 15,
+          "category": "벤조디아제핀",
+          "type": "prn",
+          "totalPills": 5
+        },
+        {
+          "name": "부스피론",
+          "ingredient": "부스피론",
+          "ingredientEn": "Buspirone",
+          "dose": 5,
+          "frequency": 2,
+          "days": 15,
+          "category": "항불안제",
+          "type": "regular"
+        }
+      ],
+      "patientMemo": "모든 약물 감량함. 제프람 절반으로 줄임. PRN은 5정만 처방받음. 부스피론도 감량함. 완전한 일상 복귀 단계임. 약물 의존도를 최소화하는 단계임."
+    }
+  ]
+}
