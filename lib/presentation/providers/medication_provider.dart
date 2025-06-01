@@ -39,61 +39,9 @@ class ScheduleItem {
 class HomeProvider with ChangeNotifier {
   List<dynamic> get urgentNotifications => [];
   List<dynamic> get upcomingSchedules => [
-    {
-      "id": "hospital_001",
-      "type": "hospital",
-      "title": "서울대학교병원 내원",
-      "subtitle": "정신건강의학과 - 김민수 교수",
-      "scheduledDate": "2025-06-07",
-      "progress": "0.3",
-      "additionalData": {
-        'department': '정신건강의학과',
-        'doctor': '김민수',
-        'appointmentTime': '14:30',
-      },
-    },
-    {
-      "id": "medication_001",
-      "type": "medication",
-      "title": "정신과 약물 복약 그룹",
-      "subtitle": "9월 16일자 처방",
-      "scheduledDate": "2025-05-23",
-      "additionalData": {
-        'medications': [
-          {
-            "name": "제프람",
-            "dose": "5mg",
-            "frequency": "1일 1회",
-            "imageUrl": "assets/pills/zepram.png",
-       //     "color": Colors.blue.shade200,
-          },
-          {
-            "name": "알프람",
-            "dose": "0.25mg",
-            "frequency": "필요시",
-            "imageUrl": "assets/pills/alpram.png",
-         //   "color": Colors.green.shade200,
-          },
-          {
-            "name": "부스피론",
-            "dose": "5mg",
-            "frequency": "1일 2회",
-            "imageUrl": "assets/pills/buspirone.png",
-          //  "color": Colors.orange.shade200,
-          },
-        ],
-        'cycleNumber': "24",
-        'remainingDays': "12",
-      },
-    },
-    {
-      "id": "prescription_001",
-      "type": "prescription",
-      "title": "처방전 갱신 예정",
-      "subtitle": "다음 진료 예약 필요",
-      "scheduledDate": "2025-05-15",
-      "progress": "0.8",
-    },
+    ScheduleItem(id: 'prescription_001', type: ScheduleType.prescription, title: '다가오는 처방 종료일', subtitle: '다음 진료 예약 필요', scheduledDate: DateTime.parse("2025-06-03"), progress: 0.5),
+    ScheduleItem(id: 'hospital_001', type: ScheduleType.hospital, title: '서울대학교병원 내원', subtitle: '정신건강의학과 - 김민수 교수', scheduledDate: DateTime.parse("2025-05-20"),progress: 0.3),
+    ScheduleItem(id: 'hospital_001', type: ScheduleType.medication, title: '정신과 약물 복약 그룹', subtitle: '9월 16일자 처방', scheduledDate: DateTime.parse("2025-09-16"), progress: 0.7),
   ];
 
   Future<void> loadHomeData() async {

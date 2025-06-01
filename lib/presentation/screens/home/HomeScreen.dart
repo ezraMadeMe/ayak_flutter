@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:yakunstructuretest/core/constants/app_colors.dart';
 import 'package:yakunstructuretest/data/models/medication_model.dart';
 import 'package:yakunstructuretest/presentation/providers/auth_provider.dart';
 import 'package:yakunstructuretest/presentation/providers/medication_provider.dart';
 import 'package:yakunstructuretest/presentation/screens/home/BasicInfoScreen.dart';
+import 'package:yakunstructuretest/presentation/screens/home/PillGrid.dart';
 
 // 홈 화면 메인
 class HomeScreen extends StatefulWidget {
@@ -15,6 +17,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  Map<String, bool> _selectedMedications = {};
+
   @override
   void initState() {
     super.initState();
@@ -49,8 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _buildUpcomingSchedule(),
 
                 // 최근 활동 섹션
-                //_buildRecentActivity(),
-                _showStatisticSheet(),
+                _buildRecentActivity(),
               ],
             ),
           ),
@@ -153,31 +157,28 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           SizedBox(height: 20),
-
           // 오늘의 복약 현황
           Consumer<MedicationProvider>(
             builder: (context, provider, _) =>
                 _buildTodayMedicationStatus(provider),
           ),
-
           SizedBox(height: 16),
-
           // 빠른 액션 버튼들
           Row(
             children: [
               Expanded(
                 child: _buildQuickActionButton(
-                  '그룹 등록',
-                  Icons.group_add,
+                  '처방전 갱신',
+                  Icons.published_with_changes_outlined,
                   Colors.green,
-                  '/medication-group',
+                  '/prescription-renewal',
                 ),
               ),
               SizedBox(width: 12),
               Expanded(
                 child: _buildQuickActionButton(
-                  '사이클 등록',
-                  Icons.schedule,
+                  '새로운 주기 등록',
+                  Icons.new_label_outlined,
                   Colors.blue,
                   '/medication-cycle',
                 ),
@@ -185,10 +186,10 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(width: 12),
               Expanded(
                 child: _buildQuickActionButton(
-                  '복약 기록',
-                  Icons.edit_note,
+                  '복약 상세 기록',
+                  Icons.add_chart,
                   Colors.orange,
-                  '/medication-record',
+                  '/medication-detail',
                 ),
               ),
             ],
@@ -216,41 +217,198 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: Column(
         children: [
-          Text('오늘의 복약 현황', style: AppTextStyles.subtitle),
-          SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _buildStatusCard(
-                  '복용 완료',
-                  todayStatus.taken,
-                  Colors.green,
-                ),
-              ),
-              Expanded(
-                child: _buildStatusCard('누락', todayStatus.missed, Colors.red),
-              ),
-              Expanded(
-                child: _buildStatusCard(
-                  '예정',
-                  todayStatus.pending,
-                  Colors.orange,
-                ),
-              ),
-            ],
+          Text('오늘의 복약그룹A 복약내용', style: AppTextStyles.subtitle),
+          SizedBox(height: 16),
+          _buildMedicationSelector(),
+          SizedBox(height: 16),
+          MedicationGridWidget(
+            medicationSequence: _getAllMedications(),
+            columnsPerRow: 6,
+            onPillTap: (medication, index) {
+              // 알약 클릭 시 동작 정의
+            },
           ),
-          SizedBox(height: 12),
-          LinearProgressIndicator(
-            value: todayStatus.completionRate,
-            backgroundColor: Colors.grey[300],
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+          Container(
+            padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+            child: LinearProgressIndicator(
+              value: todayStatus.completionRate,
+              backgroundColor: Colors.grey[300],
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+            ),
           ),
-          SizedBox(height: 4),
           Text(
             '${(todayStatus.completionRate * 100).toInt()}% 완료',
             style: AppTextStyles.caption,
+            textAlign: TextAlign.right,
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildQuickRecordButton('복용함', Icons.check_circle, const Color(0xFF28A745)),
+              _buildQuickRecordButton('누락', Icons.cancel, const Color(0xFFDC3545)),
+              _buildQuickRecordButton('건너뜀', Icons.skip_next, const Color(0xFFFFC107)),
+              _buildQuickRecordButton('부작용', Icons.warning, const Color(0xFFFF6B35)),
+            ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMedicationChip(String medication) {
+    final isSelected = _selectedMedications[medication] ?? false;
+
+    return GestureDetector(
+      onTap: () => setState(() {
+        _selectedMedications[medication] = !isSelected;
+      }),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.blue[600] : Colors.grey[100],
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? Colors.blue[600]! : Colors.grey[300]!,
+            width: 1,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isSelected ? Icons.check_circle : Icons.circle_outlined,
+              size: 16,
+              color: isSelected ? Colors.white : Colors.grey[600],
+            ),
+            SizedBox(width: 6),
+            Text(
+              medication,
+              style: TextStyle(
+                color: isSelected ? Colors.white : Colors.grey[700],
+                fontWeight: FontWeight.w500,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<String> _getAllMedications() {
+    return ['낙센', '낙센', '아스피린', '애드빌', '애드빌', '애드빌', '타이레놀', '타이레놀', '타이레놀', '타이레놀', '펜잘큐', '오메프라졸'];
+  }
+  Map<String, List<String>> _getGroupMedications() {
+    return {'D' : ['낙센', '아스피린', '애드빌'], "E" : ['애드빌'], "P": ['타이레놀', '펜잘큐', '오메프라졸']};
+  }
+  List<String> _getFrequencyMedications() {
+    return ['아침', "저녁", "필요시"];
+  }
+
+  Widget _buildMedicationSelector() {
+    final medications = _getFrequencyMedications();
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '복약 그룹A의 복약 패턴',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[800],
+                  ),
+                ),
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () => setState(() {
+                        _selectedMedications = {
+                          for (String med in medications) med: true
+                        };
+                      }),
+                      child: Text(
+                        '전체선택',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => setState(() {
+                        _selectedMedications = {
+                          for (String med in medications) med: false
+                        };
+                      }),
+                      child: Text(
+                        '전체해제',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: medications.map((med) => _buildMedicationChip(med)).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickRecordButton(String label, IconData icon, Color color) {
+    return GestureDetector(
+      onTap: () => _recordMedication(label),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: color, size: 28),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _recordMedication(String type) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('복약 기록: $type'),
+        backgroundColor: const Color(0xFF28A745),
       ),
     );
   }
@@ -420,7 +578,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildScheduleCard(dynamic schedule) {
+  Widget _buildScheduleCard(ScheduleItem schedule) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
       decoration: BoxDecoration(
@@ -435,31 +593,14 @@ class _HomeScreenState extends State<HomeScreen> {
             _buildScheduleHeader(schedule),
             if (schedule != null &&
                 schedule is Map &&
-                schedule.containsKey('progress') &&
-                schedule['progress'] != null) ...[
+                schedule.progress != null) ...[
               SizedBox(height: 8),
-              _buildProgressBar(schedule['progress'].toDouble()),
+              _buildProgressBar(schedule.progress!),
             ],
             SizedBox(height: 12),
             Divider(thickness: 1, height: 1),
             SizedBox(height: 12),
             _buildScheduleContent(schedule),
-            Text(schedule['title'] ?? '일정', style: AppTextStyles.subtitle),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                schedule['date'] ?? '',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -694,7 +835,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildScheduleHeader(dynamic schedule) {
+  Widget _buildScheduleHeader(ScheduleItem schedule) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -716,20 +857,40 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: _getDaysRemainingColor(schedule.daysRemaining),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Text(
-            schedule.daysRemainingText,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
+        Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: _getDaysRemainingColor(schedule.daysRemaining),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child:
+                Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    schedule.daysRemainingText,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+            SizedBox(height: 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  DateFormat('yyyy-MM-dd').format(schedule.scheduledDate),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );
@@ -777,17 +938,6 @@ class _HomeScreenState extends State<HomeScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => BasicInfoScreen(),
-    );
-  }
-
-  Widget _showStatisticSheet() {
-    return Container(
-      child: _buildQuickActionButton(
-        '처방 통계',
-        Icons.baby_changing_station,
-        Colors.orange,
-        '/statistics',
-      ),
     );
   }
 }

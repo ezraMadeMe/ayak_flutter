@@ -32,8 +32,8 @@ class UserModel {
 class UserMedicalInfoModel {
   final int id;
   final String userId;
-  final HospitalModel hospital;
-  final IllnessModel illness;
+  final Hospital hospital;
+  final Illness illness;
   final bool isPrimary;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -52,8 +52,8 @@ class UserMedicalInfoModel {
     return UserMedicalInfoModel(
       id: json['id'],
       userId: json['user_id'],
-      hospital: HospitalModel.fromJson(json['hospital']),
-      illness: IllnessModel.fromJson(json['illness']),
+      hospital: Hospital.fromJson(json['hospital']),
+      illness: Illness.fromJson(json['illness']),
       isPrimary: json['is_primary'] ?? false,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),

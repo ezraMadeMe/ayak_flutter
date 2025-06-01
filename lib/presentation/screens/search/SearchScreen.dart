@@ -1,7 +1,8 @@
+
+// 검색 탭 컨텐츠
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:yakunstructuretest/core/constants/app_colors.dart';
-import 'package:yakunstructuretest/presentation/providers/search_provider.dart';
+import 'package:yakunstructuretest/constants/app_styles.dart';
+import 'package:yakunstructuretest/presentation/screens/home/MainTabView.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -10,271 +11,247 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  String _selectedFilter = 'all'; // all, medications, records, notes
+class _SearchScreenState extends State<SearchScreen>
+    with AutomaticKeepAliveClientMixin {
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: TextField(
-          controller: _searchController,
-          decoration: InputDecoration(
-            hintText: '약물명, 메모 내용 검색...',
-            border: InputBorder.none,
-            suffixIcon: IconButton(
-              onPressed: () => _performSearch(),
-              icon: Icon(Icons.search),
-            ),
-          ),
-          onSubmitted: (_) => _performSearch(),
-        ),
-      ),
-      body: Column(
-        children: [
-          // 검색 필터
-          _buildSearchFilters(),
+  bool get wantKeepAlive => true; // 탭 전환 시 상태 유지
 
-          // 검색 결과
-          Expanded(
-            child: Consumer<SearchProvider>(
-              builder: (context, provider, _) {
-                if (provider.isLoading) {
-                  return Center(child: CircularProgressIndicator());
-                }
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
+  String _selectedCategory = 'all';
 
-                if (provider.searchResults.isEmpty && _searchController.text.isNotEmpty) {
-                  return _buildEmptyState();
-                }
-
-                return _buildSearchResults(provider.searchResults);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSearchFilters() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            _buildFilterChip('전체', 'all'),
-            SizedBox(width: 8),
-            _buildFilterChip('약물', 'medications'),
-            SizedBox(width: 8),
-            _buildFilterChip('복약기록', 'records'),
-            SizedBox(width: 8),
-            _buildFilterChip('메모', 'notes'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchResults(List<SearchResult> results) {
-    return ListView.builder(
-      padding: EdgeInsets.all(16),
-      itemCount: results.length,
-      itemBuilder: (context, index) {
-        final result = results[index];
-        return _buildSearchResultItem(result);
-      },
-    );
-  }
-
-  Widget _buildSearchResultItem(SearchResult result) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4)],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: _getResultTypeColor(result.type),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  _getResultTypeLabel(result.type),
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-              ),
-              Spacer(),
-              Text(result.date.toString(), style: AppTextStyles.caption),
-            ],
-          ),
-          SizedBox(height: 8),
-          Text(result.title, style: AppTextStyles.subtitle),
-          if (result.subtitle != null) ...[
-            SizedBox(height: 4),
-            Text(result.subtitle!, style: AppTextStyles.caption),
-          ],
-          if (result.highlightedContent != null) ...[
-            SizedBox(height: 8),
-            Text(result.highlightedContent!, style: AppTextStyles.body),
-          ],
-        ],
-      ),
-    );
-  }
-
-  // 누락된 메서드 1: 필터 칩 빌더
-  Widget _buildFilterChip(String label, String value) {
-    final isSelected = _selectedFilter == value;
-    return FilterChip(
-      label: Text(
-        label,
-        style: TextStyle(
-          color: isSelected ? Colors.white : AppColors.primary,
-          fontSize: 12,
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-        ),
-      ),
-      selected: isSelected,
-      onSelected: (selected) {
-        setState(() {
-          _selectedFilter = value;
-        });
-        if (_searchController.text.isNotEmpty) {
-          _performSearch();
-        }
-      },
-      backgroundColor: Colors.white,
-      selectedColor: AppColors.primary,
-      checkmarkColor: Colors.white,
-      elevation: isSelected ? 2 : 0,
-      shadowColor: AppColors.primary.withOpacity(0.3),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: BorderSide(
-          color: isSelected ? AppColors.primary : Colors.grey.shade300,
-          width: 1,
-        ),
-      ),
-    );
-  }
-  // 누락된 메서드 2: 빈 상태 위젯
-  Widget _buildEmptyState() {
-    return Center(
-      child: Container(
-        padding: EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(40),
-              ),
-              child: Icon(
-                Icons.search_off,
-                size: 40,
-                color: Colors.grey.shade400,
-              ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              '검색 결과가 없습니다',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade600,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              '다른 키워드로 검색해보세요\n또는 필터를 변경해보세요',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey.shade500,
-                height: 1.5,
-              ),
-            ),
-            SizedBox(height: 24),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                '💡 팁: 약물명의 일부만 입력해도 검색됩니다',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.primary,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // 누락된 메서드 3: 결과 타입별 색상
-  Color _getResultTypeColor(SearchResultType type) {
-    switch (type) {
-      case SearchResultType.medication:
-        return Colors.blue;
-      case SearchResultType.record:
-        return Colors.green;
-      case SearchResultType.note:
-        return Colors.orange;
-      case SearchResultType.prescription:
-        return Colors.purple;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  // 누락된 메서드 4: 결과 타입별 라벨
-  String _getResultTypeLabel(SearchResultType type) {
-    switch (type) {
-      case SearchResultType.medication:
-        return '약물';
-      case SearchResultType.record:
-        return '복약기록';
-      case SearchResultType.note:
-        return '메모';
-      case SearchResultType.prescription:
-        return '처방전';
-      default:
-        return '기타';
-    }
-  }
-
-  // 날짜 포맷팅 메서드
-  String _formatDate(DateTime date) {
-    return '${date.month}/${date.day}';
-  }
-
-  void _performSearch() {
-    final query = _searchController.text.trim();
-    if (query.isNotEmpty) {
-      context.read<SearchProvider>().search(query, _selectedFilter);
-    }
-  }
+  // 검색 카테고리
+  final List<SearchCategory> _categories = [
+    SearchCategory('all', '전체', Icons.all_inclusive),
+    SearchCategory('medication', '의약품', Icons.medication),
+    SearchCategory('hospital', '병원', Icons.local_hospital),
+    SearchCategory('ingredient', '성분', Icons.science),
+    SearchCategory('records', '복약기록', Icons.receipt_long),
+  ];
 
   @override
   void dispose() {
     _searchController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: Column(
+          children: [
+            _buildSearchHeader(),
+            _buildSearchCategories(),
+            Expanded(child: _buildSearchContent()),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchHeader() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '검색',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: TextField(
+              controller: _searchController,
+              focusNode: _searchFocusNode,
+              decoration: InputDecoration(
+                hintText: '의약품, 처방전, 병원 등을 검색하세요',
+                prefixIcon: Icon(Icons.search, color: AppColors.primary),
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                  onPressed: () {
+                    _searchController.clear();
+                    setState(() {});
+                  },
+                  icon: const Icon(Icons.clear),
+                )
+                    : null,
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
+              ),
+              onChanged: (value) => setState(() {}),
+              onSubmitted: _performSearch,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchCategories() {
+    return Container(
+      height: 100,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: _categories.length,
+        itemBuilder: (context, index) {
+          final category = _categories[index];
+          final isSelected = _selectedCategory == category.id;
+
+          return GestureDetector(
+            onTap: () => setState(() => _selectedCategory = category.id),
+            child: Container(
+              width: 80,
+              margin: const EdgeInsets.only(right: 12),
+              decoration: BoxDecoration(
+                color: isSelected ? AppColors.primary : Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    category.icon,
+                    color: isSelected ? Colors.white : AppColors.primary,
+                    size: 24,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    category.title,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: isSelected ? Colors.white : Colors.grey[700],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSearchContent() {
+    if (_searchController.text.isEmpty) {
+      return _buildSearchSuggestions();
+    } else {
+      return _buildSearchResults();
+    }
+  }
+
+  Widget _buildSearchSuggestions() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '최근 검색',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: ['아스피린', '혈압약', '서울대병원', '처방전']
+                .map((term) => _buildSuggestionChip(term))
+                .toList(),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            '인기 검색어',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: ['타이레놀', '감기약', '소화제', '진통제']
+                .map((term) => _buildSuggestionChip(term))
+                .toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSuggestionChip(String term) {
+    return GestureDetector(
+      onTap: () {
+        _searchController.text = term;
+        _performSearch(term);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.grey[300]!),
+        ),
+        child: Text(
+          term,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey[700],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchResults() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: const Center(
+        child: Text('검색 결과 표시 영역'),
+      ),
+    );
+  }
+
+  void _performSearch(String query) {
+    // 검색 로직 구현
+    print('검색어: $query, 카테고리: $_selectedCategory');
   }
 }

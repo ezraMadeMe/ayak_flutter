@@ -1,17 +1,38 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
+import 'package:yakunstructuretest/core/storage/storage_manager.dart';
 import 'package:yakunstructuretest/presentation/providers/analytics_provider.dart';
 import 'package:yakunstructuretest/presentation/providers/auth_provider.dart';
+import 'package:yakunstructuretest/presentation/providers/hospital_provider.dart';
+import 'package:yakunstructuretest/presentation/providers/illness_provider.dart';
 import 'package:yakunstructuretest/presentation/providers/medication_provider.dart';
+import 'package:yakunstructuretest/presentation/providers/prescription_provider.dart';
 import 'package:yakunstructuretest/presentation/providers/search_provider.dart';
-import 'package:yakunstructuretest/presentation/screens/home/HomeScreen.dart';
+import 'package:yakunstructuretest/presentation/screens/home/MainTabView.dart';
 import 'package:yakunstructuretest/presentation/screens/medication/MedicationScreen.dart';
+import 'package:yakunstructuretest/presentation/screens/prescriptions/PrescriptionRenewalScreen.dart';
+import 'package:yakunstructuretest/presentation/screens/search/HospitalSearchScreen.dart';
+import 'package:yakunstructuretest/presentation/screens/search/IllnessSearchScreen.dart';
 import 'package:yakunstructuretest/presentation/screens/search/SearchScreen.dart';
 import 'package:yakunstructuretest/presentation/screens/statistics/StatisticsScreen.dart';
 
 
-// 테스트용 메인 함수
-void main() {
+void main() async {
+
+  await dotenv.load(fileName: '.env');
+  // 카카오 SDK 초기화
+  KakaoSdk.init(
+    nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY']!,
+    javaScriptAppKey: dotenv.env['KAKAO_JAVASCRIPT_APP_KEY']!,
+  );
+  // 스토리지 초기화
+  await StorageManager.instance.init();
+  HttpOverrides.global = MyHttpOverrides();
+
   runApp(
     MultiProvider(
       providers: [
@@ -20,9 +41,12 @@ void main() {
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => AnalyticsProvider()),
         ChangeNotifierProvider(create: (_) => SearchProvider()),
+        ChangeNotifierProvider(create: (_) => PrescriptionProvider()),
+        ChangeNotifierProvider(create: (_) => HospitalProvider()),
+        ChangeNotifierProvider(create: (_) => IllnessProvider()),
       ],
       child: MaterialApp(
-        home: HomeScreen(),
+        home: MainTabView(),
         routes: {
           '/search': (context) => Scaffold(appBar: AppBar(title: Text('검색')), body: SearchScreen()),
           '/schedule': (context) => Scaffold(appBar: AppBar(title: Text('일정')), body: Center(child: Text('일정 화면'))),
@@ -30,10 +54,23 @@ void main() {
           '/medication-cycle': (context) => Scaffold(appBar: AppBar(title: Text('사이클 등록')), body: Center(child: Text('사이클 등록 화면'))),
           '/medication-record': (context) => Scaffold(appBar: AppBar(title: Text('복약 기록')), body: MedicationScreen()),
           '/statistics': (context) => Scaffold(appBar: AppBar(title: Text('처방 통계')), body: StatisticsScreen()),
+          '/prescription-renewal': (context) => Scaffold(appBar: AppBar(title: Text('처방전 갱신')), body: PrescriptionRenewalScreen()),
+          '/register-hospital': (context) => Scaffold(appBar: AppBar(title: Text('병원 등록')), body: HospitalSearchScreen()),
+          '/register-illness': (context) => Scaffold(appBar: AppBar(title: Text('질병/증상 등록')), body: IllnessSearchScreen()),
+
         },
       ),
     ),
   );
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }
 
 class MyApp extends StatelessWidget {
