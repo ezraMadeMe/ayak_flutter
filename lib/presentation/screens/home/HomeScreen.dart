@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:yakunstructuretest/core/constants/app_colors.dart';
 import 'package:yakunstructuretest/data/models/medication_model.dart';
 import 'package:yakunstructuretest/presentation/providers/auth_provider.dart';
+import 'package:yakunstructuretest/presentation/providers/enhanced_medication_provider.dart';
 import 'package:yakunstructuretest/presentation/providers/medication_provider.dart';
 import 'package:yakunstructuretest/presentation/screens/home/BasicInfoScreen.dart';
 import 'package:yakunstructuretest/presentation/screens/home/PillGrid.dart';
@@ -156,7 +157,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          SizedBox(height: 20),
           // 오늘의 복약 현황
           Consumer<MedicationProvider>(
             builder: (context, provider, _) =>
@@ -217,31 +217,44 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: Column(
         children: [
-          Text('오늘의 복약그룹A 복약내용', style: AppTextStyles.subtitle),
-          SizedBox(height: 16),
-          _buildMedicationSelector(),
-          SizedBox(height: 16),
+          Text('복약그룹A - 아침약', style: AppTextStyles.subtitle),
           MedicationGridWidget(
-            medicationSequence: _getAllMedications(),
+            groupId: 'group_001',
+            cycleId: 1,
+            dosagePattern: '아침',
+            medications: medications,
             columnsPerRow: 6,
-            onPillTap: (medication, index) {
-              // 알약 클릭 시 동작 정의
+            onRecordSubmitted: (selectedMedications, action) {
+              print('기록 완료: ${selectedMedications.length}개 약물, 액션: ${action.displayName}');
+              // 여기서 UI 새로고침이나 추가 로직 수행
             },
           ),
-          Container(
-            padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-            child: LinearProgressIndicator(
-              value: todayStatus.completionRate,
-              backgroundColor: Colors.grey[300],
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 4,
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  child: LinearProgressIndicator(
+                    value: todayStatus.completionRate,
+                    backgroundColor: Colors.grey[300],
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                    minHeight: 8,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  '${(todayStatus.completionRate * 100).toInt()}%',
+                  style: AppTextStyles.caption,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           ),
-          Text(
-            '${(todayStatus.completionRate * 100).toInt()}% 완료',
-            style: AppTextStyles.caption,
-            textAlign: TextAlign.right,
-          ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -296,8 +309,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  List<PillData> medications = [
+    PillData(name: '낙센', color: Color(0xFF4ECDC4), shape: 'oval', medicationDetailId: 1),
+    PillData(name: '아스피린', color: Color(0xFF96CEB4), shape: 'round', medicationDetailId: 2),
+    PillData(name: '애드빌', color: Color(0xFFFF6B35), shape: 'oval', medicationDetailId: 3),
+    PillData(name: '타이레놀', color: Colors.white, shape: 'round', medicationDetailId: 4),
+    PillData(name: '펜잘큐', color: Color(0xFF45B7D1), shape: 'round', medicationDetailId: 5),
+    PillData(name: '오메프라졸', color: Color(0xFFDDA0DD), shape: 'capsule', medicationDetailId: 6),
+  ];
   List<String> _getAllMedications() {
-    return ['낙센', '낙센', '아스피린', '애드빌', '애드빌', '애드빌', '타이레놀', '타이레놀', '타이레놀', '타이레놀', '펜잘큐', '오메프라졸'];
+    return ['낙센', '낙센', '아스피린', '애드빌', '애드빌', '타이레놀', '타이레놀', '펜잘큐', '오메프라졸'];
   }
   Map<String, List<String>> _getGroupMedications() {
     return {'D' : ['낙센', '아스피린', '애드빌'], "E" : ['애드빌'], "P": ['타이레놀', '펜잘큐', '오메프라졸']};

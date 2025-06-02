@@ -3,14 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:yakunstructuretest/services/auth/kakao_auth_service.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginScreen2 extends StatefulWidget {
+  const LoginScreen2({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginScreen2> createState() => _LoginScreen2State();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreen2State extends State<LoginScreen2> {
   bool _isLoading = false;
 
   @override

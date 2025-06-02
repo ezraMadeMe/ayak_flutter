@@ -1,7 +1,7 @@
 import 'package:yakunstructuretest/data/models/medication_group_model.dart';
 import 'package:yakunstructuretest/presentation/screens/home/HomeScreen.dart';
 
-class MedicationApiService {
+class MedicationApiService2 {
   static const String baseUrl = 'https://api.yourapp.com/api/v1';
 
 }

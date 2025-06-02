@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yakunstructuretest/data/models/prescription_renewal_model.dart';
 import 'package:yakunstructuretest/presentation/providers/auth_provider.dart';
+import 'package:yakunstructuretest/presentation/providers/enhanced_medication_provider.dart';
 import 'package:yakunstructuretest/presentation/providers/prescription_provider.dart';
 import 'package:yakunstructuretest/presentation/screens/home/PillGrid.dart';
 
@@ -59,7 +60,17 @@ class _PrescriptionRenewalScreenState extends State<PrescriptionRenewalScreen> {
 
               _buildMedicationSelector(),
 
-              MedicationGridWidget(medicationSequence: medicationSequence,),
+              MedicationGridWidget(
+                groupId: 'group_001',
+                cycleId: 1,
+                dosagePattern: '아침',
+                medications: medications,
+                columnsPerRow: 6,
+                onRecordSubmitted: (selectedMedications, action) {
+                  print('기록 완료: ${selectedMedications.length}개 약물, 액션: ${action.displayName}');
+                  // 여기서 UI 새로고침이나 추가 로직 수행
+                },
+              ),
 
               SizedBox(height: 20),
 
@@ -76,6 +87,14 @@ class _PrescriptionRenewalScreenState extends State<PrescriptionRenewalScreen> {
       ),
     );
   }
+  List<PillData> medications = [
+    PillData(name: '낙센', color: Color(0xFF4ECDC4), shape: 'oval', medicationDetailId: 1),
+    PillData(name: '아스피린', color: Color(0xFF96CEB4), shape: 'round', medicationDetailId: 2),
+    PillData(name: '애드빌', color: Color(0xFFFF6B35), shape: 'oval', medicationDetailId: 3),
+    PillData(name: '타이레놀', color: Colors.white, shape: 'round', medicationDetailId: 4),
+    PillData(name: '펜잘큐', color: Color(0xFF45B7D1), shape: 'round', medicationDetailId: 5),
+    PillData(name: '오메프라졸', color: Color(0xFFDDA0DD), shape: 'capsule', medicationDetailId: 6),
+  ];
 
   Widget _buildMedicationSelector() {
     List<String> _getFrequencyMedications() {
