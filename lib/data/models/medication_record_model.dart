@@ -1,11 +1,10 @@
-import 'package:yakunstructuretest/core/api/api_service.dart';
+
 import 'package:yakunstructuretest/data/models/medication_detail_model.dart';
 import 'package:yakunstructuretest/data/models/medication_group_model.dart';
 import 'package:yakunstructuretest/data/models/medication_item.dart';
 
 class MedicationRecordModel {
   final int id;
-  final int cycleId;
   final MedicationDetailModel medicationDetail;
   final String recordType;
   final DateTime recordDate;
@@ -17,7 +16,6 @@ class MedicationRecordModel {
 
   MedicationRecordModel({
     required this.id,
-    required this.cycleId,
     required this.medicationDetail,
     required this.recordType,
     required this.recordDate,
@@ -31,7 +29,6 @@ class MedicationRecordModel {
   factory MedicationRecordModel.fromJson(Map<String, dynamic> json) {
     return MedicationRecordModel(
       id: json['id'],
-      cycleId: json['cycle_id'],
       medicationDetail: MedicationDetailModel.fromJson(json['medication_detail']),
       recordType: json['record_type'],
       recordDate: DateTime.parse(json['record_date']),
@@ -42,6 +39,18 @@ class MedicationRecordModel {
       updatedAt: DateTime.parse(json['updated_at']),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'medication_detail': medicationDetail.toJson(),
+    'record_type': recordType,
+    'record_date': recordDate.toIso8601String(),
+    'quantity_taken': quantityTaken,
+    'notes': notes,
+    'symptoms': symptoms,
+    'created_at': createdAt.toIso8601String(),
+    'updated_at': updatedAt.toIso8601String(),
+  };
 }
 
 

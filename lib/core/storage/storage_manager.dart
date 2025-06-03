@@ -16,9 +16,9 @@ class StorageManager {
   StorageManager._();
 
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage(
-    aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
-    ),
+    // aOptions: AndroidOptions(
+    //   encryptedSharedPreferences: true,
+    // ),
   );
   SharedPreferences? _prefs;
 

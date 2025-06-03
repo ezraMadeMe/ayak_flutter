@@ -6,6 +6,7 @@ import 'package:yakunstructuretest/core/api/medication_api_service.dart';
 import 'package:yakunstructuretest/data/models/medication_group_model.dart';
 import 'package:yakunstructuretest/data/models/medication_item.dart';
 import 'package:yakunstructuretest/data/models/medication_record_model.dart';
+import 'package:yakunstructuretest/presentation/screens/home/PillGrid.dart';
 
 class EnhancedMedicationProvider with ChangeNotifier {
   final MedicationApiService _apiService = MedicationApiService();
@@ -16,6 +17,7 @@ class EnhancedMedicationProvider with ChangeNotifier {
   OverallStats? _overallStats;
   bool _isLoading = false;
   String? _errorMessage;
+  final Set<PillData> _selectedMedications = {};
 
   // Getters
   TodayMedicationData? get todayMedicationData => _todayMedicationData;
@@ -23,6 +25,7 @@ class EnhancedMedicationProvider with ChangeNotifier {
   OverallStats? get overallStats => _overallStats;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
+  Set<PillData> get selectedMedications => _selectedMedications;
 
   /// 오늘의 복약 데이터 로드
   Future<void> loadTodayMedications({String? date, String? groupId}) async {
@@ -78,22 +81,33 @@ class EnhancedMedicationProvider with ChangeNotifier {
     }
   }
 
-  /// 홈화면용 첫 번째 복약 시간대 데이터 조회
-  MedicationGroupTimeData? getFirstDosageTimeData() {
-    if (_medicationGroups.isEmpty) return null;
+  /// 홈화면 - 복약이 도래한 가장 가까운 복약 스케줄
+  MedicationGroupTimeData? getFirstDosageTimeData(MedicationGroupModel group) {
+    MedicationGroupModel? firstGroup;
+    Map<String, List<MedicationItemData>>? medications;
+    CompletionStatus? completionStatus;
+    String? firstTime;
 
-    final firstGroup = _medicationGroups.first;
-    if (firstGroup.dosageTimes.isEmpty) return null;
-
-    final firstTime = firstGroup.dosageTimes.first;
-    final medications = firstGroup.medicationsByTime[firstTime] ?? [];
-    final completionStatus = firstGroup.completionStatus[firstTime];
+    if (_medicationGroups.isEmpty || group.dosageTimes.isEmpty) {
+      return null;
+    } else if (_medicationGroups.length == 1) {
+      firstGroup = _medicationGroups.first;
+      firstTime = firstGroup.dosageTimes.first;
+      medications = firstGroup.medicationsByTime;
+      completionStatus = firstGroup.completionStatus[firstTime];
+      if (firstGroup.dosageTimes.isEmpty) return null;
+    } else if (group.dosageTimes.length > 0) {
+      firstGroup = _medicationGroups.first;
+      firstTime = group.dosageTimes.first;
+      medications = group.medicationsByTime;
+      completionStatus = group.completionStatus[firstTime];
+    }
 
     return MedicationGroupTimeData(
-      groupId: firstGroup.groupId,
+      groupId: firstGroup!.groupId,
       groupName: firstGroup.groupName,
-      dosageTime: firstTime,
-      medications: medications,
+      dosageTime: firstTime!,
+      medications: medications![firstTime]!,
       completionStatus: completionStatus,
       pillDataList: firstGroup.toPillDataList(firstTime),
     );
@@ -155,7 +169,7 @@ class EnhancedMedicationProvider with ChangeNotifier {
         // 성공한 기록들에 대해 로컬 상태 업데이트
         for (final record in result.createdRecords) {
           await _updateLocalRecordStatus(
-            record.medicationDetailId,
+            record.medicationDetail.cycleId,
             record.recordType,
           );
         }
@@ -205,8 +219,11 @@ class EnhancedMedicationProvider with ChangeNotifier {
 
             medications[i] = updatedMedication;
 
+
+            MedicationGroupTimeData? timeData = getFirstDosageTimeData(group);
+
             // 완료 상태 재계산
-            _recalculateCompletionStatus(group, timeKey);
+            _recalculateCompletionStatus(timeData!, timeKey);
             break;
           }
         }
@@ -220,11 +237,11 @@ class EnhancedMedicationProvider with ChangeNotifier {
 
   /// 완료 상태 재계산
   void _recalculateCompletionStatus(MedicationGroupTimeData group, String timeKey) {
-    final medications = group.medicationsByTime[timeKey] ?? [];
+    final medications = group.medications ?? [];
     final total = medications.length;
     final taken = medications.where((m) => m.isTakenToday).length;
 
-    group.completionStatus[timeKey] = CompletionStatus(
+    group.completionStatus = CompletionStatus(
       total: total,
       taken: taken,
       completionRate: total > 0 ? taken / total : 0.0,
@@ -296,6 +313,21 @@ class EnhancedMedicationProvider with ChangeNotifier {
     _errorMessage = null;
   }
 
+  void addMedication(PillData medication) {
+    _selectedMedications.add(medication);
+    notifyListeners();
+  }
+
+  void removeMedication(PillData medication) {
+    _selectedMedications.remove(medication);
+    notifyListeners();
+  }
+
+  void clearSelection() {
+    _selectedMedications.clear();
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     // 필요시 리소스 정리
@@ -311,7 +343,7 @@ class MedicationGroupTimeData {
   final String groupName;
   final String dosageTime;
   final List<MedicationItemData> medications;
-  final CompletionStatus? completionStatus;
+  late final CompletionStatus? completionStatus;
   final List<PillData> pillDataList;
 
   MedicationGroupTimeData({

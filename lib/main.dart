@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:yakunstructuretest/core/storage/storage_manager.dart';
 import 'package:yakunstructuretest/presentation/providers/analytics_provider.dart';
@@ -12,6 +13,7 @@ import 'package:yakunstructuretest/presentation/providers/illness_provider.dart'
 import 'package:yakunstructuretest/presentation/providers/medication_provider.dart';
 import 'package:yakunstructuretest/presentation/providers/prescription_provider.dart';
 import 'package:yakunstructuretest/presentation/providers/search_provider.dart';
+import 'package:yakunstructuretest/presentation/providers/enhanced_medication_provider.dart';
 import 'package:yakunstructuretest/presentation/screens/auth/login_screen.dart';
 import 'package:yakunstructuretest/presentation/screens/home/MainTabView.dart';
 import 'package:yakunstructuretest/presentation/screens/medication/MedicationScreen.dart';
@@ -54,10 +56,11 @@ void main() async {
         ChangeNotifierProvider(create: (_) => PrescriptionProvider()),
         ChangeNotifierProvider(create: (_) => HospitalProvider()),
         ChangeNotifierProvider(create: (_) => IllnessProvider()),
+        ChangeNotifierProvider(create: (_) => EnhancedMedicationProvider()),
       ],
       child: MaterialApp(
-        home: MainTabView(),
-        //home: isLoggedIn ? MainTabView() : LoginScreen(),
+        //home: MainTabView(),
+        home: isLoggedIn ? MainTabView() : LoginScreen(),
         routes: {
           '/home': (context) => MainTabView(),
           '/search': (context) => Scaffold(appBar: AppBar(title: Text('검색')), body: SearchScreen()),
@@ -84,8 +87,54 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: MaterialApp(
+        theme: ThemeData(
+          fontFamily: "NEXON",
+          buttonTheme: ButtonThemeData(),
+          textTheme: TextTheme(
+            titleLarge: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+            titleMedium: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+            labelLarge: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: Color(0xEDFFB72E)),
+            labelMedium: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+            bodyLarge: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+          ),
+          colorScheme: ColorScheme(
+            brightness: Brightness.light,
+            primary: Color(0xB32E0B5A),
+            onPrimary: Color(0xECDBB3FF),
+            primaryContainer: Color(0xFFFFFDFA),
+            secondary: Color(0xFFE7FF75),
+            onSecondary: Color(0xB35F2BA8),
+            surface: Color(0xFFFFFFFF),
+            onSurface: Color(0xB32E0B5A),
+            error: Color(0xFFFF6347),
+            onError: Color(0xFFFFF8DC),
+          ),
+        ),
+        darkTheme: ThemeData(
+          colorScheme: ColorScheme(
+            brightness: Brightness.dark,
+            primary: Color(0xB32E0B5A),
+            onPrimary: Color(0xECDBB3FF),
+            primaryContainer: Color(0xFFFFFDFA),
+            secondary: Color(0xFFBEF8D0),
+            onSecondary: Color(0xB35F2BA8),
+            surface: Color(0xFFFFFFFF),
+            onSurface: Color(0xB32E0B5A),
+            error: Color(0xFFFF6347),
+            onError: Color(0xFFFFF8DC),
+          ),
+        ),
+      ),
+    );
+  }
+}
 // ===== 프로젝트 구조 =====
 /*
 lib/

@@ -37,6 +37,11 @@ class ScheduleItem {
 }
 
 class HomeProvider with ChangeNotifier {
+  bool _isLoading = false;
+  String? _errorMessage;
+  
+  bool get isLoading => _isLoading;
+  String? get errorMessage => _errorMessage;
   List<dynamic> get urgentNotifications => [];
   List<dynamic> get upcomingSchedules => [
     ScheduleItem(id: 'prescription_001', type: ScheduleType.prescription, title: '다가오는 처방 종료일', subtitle: '다음 진료 예약 필요', scheduledDate: DateTime.parse("2025-06-03"), progress: 0.5),
@@ -45,11 +50,37 @@ class HomeProvider with ChangeNotifier {
   ];
 
   Future<void> loadHomeData() async {
-    await Future.delayed(Duration(milliseconds: 500));
+    try {
+      _isLoading = true;
+      _errorMessage = null;
+      notifyListeners();
+      
+      await Future.delayed(Duration(milliseconds: 500));
+      // 여기에 실제 데이터 로딩 로직 추가
+      
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> refreshHomeData() async {
-    await Future.delayed(Duration(milliseconds: 300));
+    try {
+      _isLoading = true;
+      _errorMessage = null;
+      notifyListeners();
+      
+      await Future.delayed(Duration(milliseconds: 300));
+      // 여기에 실제 데이터 새로고침 로직 추가
+      
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }
 
@@ -196,6 +227,8 @@ class MedicationProvider with ChangeNotifier {
           remainingQuantity: 20,
           unit: "mg",
           specialInstructions: "식후 복용",
+          actualDosagePattern: Map(),
+          patientAdjustments: Map(),
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
         ),
@@ -240,7 +273,6 @@ class MedicationProvider with ChangeNotifier {
       // 로컬 상태 업데이트
       final newRecord = MedicationRecordModel(
         id: DateTime.now().millisecondsSinceEpoch,
-        cycleId: cycleId,
         medicationDetail: _todayMedications.firstWhere((m) => m.id == medicationDetailId),
         recordType: recordType,
         recordDate: recordDate,

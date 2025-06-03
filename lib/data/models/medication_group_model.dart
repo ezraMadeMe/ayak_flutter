@@ -2,7 +2,6 @@
 // 복약 그룹 모델
 import 'dart:ui';
 
-import 'package:yakunstructuretest/core/api/api_service.dart';
 import 'package:yakunstructuretest/data/models/medication_item.dart';
 import 'package:yakunstructuretest/data/models/user_model.dart';
 import 'package:yakunstructuretest/presentation/providers/enhanced_medication_provider.dart';

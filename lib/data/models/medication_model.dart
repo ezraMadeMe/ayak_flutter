@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class MedicationModel {
   final int itemSeq;
   final String itemName;
@@ -34,6 +36,18 @@ class MedicationModel {
       updatedAt: DateTime.parse(json['updated_at']),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'itemSeq': itemSeq,
+    'itemName': itemName,
+    'entpName': entpName,
+    'itemImage': itemImage,
+    'className': className,
+    'dosageForm': dosageForm,
+    'isPrescription': isPrescription,
+    'createdAt': createdAt,
+    'updatedAt': updatedAt,
+  };
 }
 
 

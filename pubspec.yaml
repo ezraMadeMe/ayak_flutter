@@ -42,8 +42,9 @@ dependencies:
   fl_chart: ^0.67.0
   kakao_flutter_sdk: ^1.9.1+2
   shared_preferences: ^2.2.2
-  flutter_secure_storage: ^9.0.0
-  kakao_flutter_sdk_user: ^1.4.1
+  flutter_secure_storage: ^9.2.2
+  kakao_flutter_sdk_user: ^1.9.7+3
+  google_sign_in: ^6.3.0
 
 
 
@@ -67,6 +68,7 @@ flutter:
     - .env
     - assets/
     - assets/images/
+    - assets/logo/
     - assets/medication_records.json
     - assets/images/IMG_20201202_001106.png
   # The following line ensures that the Material Icons font is

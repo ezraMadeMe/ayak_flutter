@@ -11,6 +11,8 @@ class MedicationDetailModel {
   final int remainingQuantity;
   final String unit;
   final String specialInstructions;
+  final Map<String, dynamic>? actualDosagePattern;
+  final Map<String, dynamic>? patientAdjustments;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -25,6 +27,8 @@ class MedicationDetailModel {
     required this.remainingQuantity,
     required this.unit,
     required this.specialInstructions,
+    required this.actualDosagePattern,
+    required this.patientAdjustments,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -41,8 +45,27 @@ class MedicationDetailModel {
       remainingQuantity: json['remaining_quantity'],
       unit: json['unit'],
       specialInstructions: json['special_instructions'] ?? '',
+      actualDosagePattern: json['actual_dosage_pattern'] ?? {},
+      patientAdjustments: json['patient_adjustments'] ?? {},
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'cycle_id': cycleId,
+    'medication': medication.toJson(),
+    'dosage_interval': dosageInterval,
+    'frequency_per_interval': frequencyPerInterval,
+    'quantity_per_dose': quantityPerDose,
+    'total_prescribed': totalPrescribed,
+    'remaining_quantity': remainingQuantity,
+    'unit': unit,
+    'special_instructions': specialInstructions,
+    'actual_dosage_pattern': actualDosagePattern,
+    'patient_adjustments': patientAdjustments,
+    'created_at': createdAt.toIso8601String(),
+    'updated_at': updatedAt.toIso8601String(),
+  };
 }

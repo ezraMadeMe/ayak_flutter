@@ -1,7 +1,62 @@
 
 
-// 복약 아이템 데이터 모델
-import 'package:yakunstructuretest/core/api/api_service.dart';
+// 약물 기본 정보 모델
+class MedicationBasic {
+  final int itemSeq;
+  final String itemName;
+  final String entpName;
+  final String? itemImage;
+  final String className;
+  final String dosageForm;
+  final bool isPrescription;
+
+  MedicationBasic({
+    required this.itemSeq,
+    required this.itemName,
+    required this.entpName,
+    this.itemImage,
+    required this.className,
+    required this.dosageForm,
+    required this.isPrescription,
+  });
+
+  factory MedicationBasic.fromJson(Map<String, dynamic> json) {
+    return MedicationBasic(
+      itemSeq: json['item_seq'],
+      itemName: json['item_name'],
+      entpName: json['entp_name'],
+      itemImage: json['item_image'],
+      className: json['class_name'],
+      dosageForm: json['dosage_form'],
+      isPrescription: json['is_prescription'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'item_seq': itemSeq,
+    'item_name': itemName,
+    'entp_name': entpName,
+    'item_image': itemImage,
+    'class_name': className,
+    'dosage_form': dosageForm,
+    'is_prescription': isPrescription,
+  };
+}
+
+
+class DateRange {
+  final DateTime startDate;
+  final DateTime endDate;
+
+  DateRange({required this.startDate, required this.endDate});
+
+  factory DateRange.fromJson(Map<String, dynamic> json) {
+    return DateRange(
+      startDate: DateTime.parse(json['start_date']),
+      endDate: DateTime.parse(json['end_date']),
+    );
+  }
+}
 
 class MedicationItemData {
   final int medicationDetailId;
@@ -39,6 +94,18 @@ class MedicationItemData {
       recordType: json['record_type'],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'medication_detail_id': medicationDetailId,
+    'medication': medication.toJson(),
+    'dosage_time': dosageTime,
+    'quantity_per_dose': quantityPerDose,
+    'unit': unit,
+    'special_instructions': specialInstructions,
+    'is_taken_today': isTakenToday,
+    'taken_at': takenAt?.toIso8601String(),
+    'record_type': recordType,
+  };
 }
 
 
@@ -61,6 +128,12 @@ class CompletionStatus {
       completionRate: json['completion_rate'].toDouble(),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'total': total,
+    'taken': taken,
+    'completion_rate': completionRate,
+  };
 }
 
 // 전체 통계 모델
@@ -85,6 +158,13 @@ class OverallStats {
       overallCompletionRate: json['overall_completion_rate'].toDouble(),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'total_medications': totalMedications,
+    'total_taken': totalTaken,
+    'total_missed': totalMissed,
+    'overall_completion_rate': overallCompletionRate,
+  };
 }
 
 // 다음 복약 시간 모델

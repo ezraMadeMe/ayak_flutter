@@ -92,7 +92,6 @@ class MedicationGridWidget extends StatefulWidget {
 class _MedicationGridWidgetState extends State<MedicationGridWidget>
     with TickerProviderStateMixin {
   Set<int> selectedIndices = {};
-  bool _isSubmitting = false;
   late AnimationController _animationController;
 
   @override
@@ -120,14 +119,6 @@ class _MedicationGridWidgetState extends State<MedicationGridWidget>
           _buildHeader(),
           SizedBox(height: 16),
           _buildGrid(),
-          if (selectedIndices.isNotEmpty) ...[
-            SizedBox(height: 16),
-            _buildActionButtons(),
-          ],
-          if (_isSubmitting) ...[
-            SizedBox(height: 8),
-            _buildLoadingIndicator(),
-          ],
         ],
       ),
     );
@@ -216,6 +207,22 @@ class _MedicationGridWidgetState extends State<MedicationGridWidget>
     });
   }
 
+  void _togglePill(int index, PillData medication) {
+    setState(() {
+      if (selectedIndices.contains(index)) {
+        selectedIndices.remove(index);
+        context.read<EnhancedMedicationProvider>().removeMedication(medication);
+      } else {
+        selectedIndices.add(index);
+        context.read<EnhancedMedicationProvider>().addMedication(medication);
+      }
+    });
+
+    _animationController.forward().then((_) {
+      _animationController.reverse();
+    });
+  }
+
   Widget _buildGrid() {
     final rows = <List<PillData>>[];
     for (int i = 0; i < widget.medications.length; i += widget.columnsPerRow) {
@@ -259,19 +266,7 @@ class _MedicationGridWidgetState extends State<MedicationGridWidget>
     final isSelected = selectedIndices.contains(index);
 
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          if (isSelected) {
-            selectedIndices.remove(index);
-          } else {
-            selectedIndices.add(index);
-          }
-        });
-
-        _animationController.forward().then((_) {
-          _animationController.reverse();
-        });
-      },
+      onTap: () => _togglePill(index, medication),
       child: Container(
         decoration: BoxDecoration(
           color: medication.color,
@@ -279,8 +274,8 @@ class _MedicationGridWidgetState extends State<MedicationGridWidget>
               ? Border.all(color: Colors.grey.withOpacity(0.5))
               : null,
           borderRadius: BorderRadius.circular(
-            medication.shape == 'round' ? 8 :
-            medication.shape == 'capsule' ? 8 :
+            medication.shape == 'round' ? 6 :
+            medication.shape == 'capsule' ? 6 :
             4, // oval
           ),
           boxShadow: isSelected ? [
@@ -364,184 +359,6 @@ class _MedicationGridWidgetState extends State<MedicationGridWidget>
           size: 16,
           color: Colors.grey.withOpacity(0.5),
         ),
-      ),
-    );
-  }
-
-  Widget _buildActionButtons() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '선택된 약물 ${selectedIndices.length}개',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-          SizedBox(height: 12),
-          Row(
-            children: MedicationRecordAction.values.map((action) {
-              return Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4),
-                  child: _buildActionButton(action),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionButton(MedicationRecordAction action) {
-    return GestureDetector(
-      onTap: _isSubmitting ? null : () => _submitMedicationRecord(action),
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: action.color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: action.color.withOpacity(0.3)),
-        ),
-        child: Column(
-          children: [
-            Icon(action.icon, color: action.color, size: 24),
-            SizedBox(height: 4),
-            Text(
-              action.displayName,
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: action.color,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLoadingIndicator() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-            ),
-          ),
-          SizedBox(width: 12),
-          Text(
-            '복약 기록을 저장하는 중...',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _submitMedicationRecord(MedicationRecordAction action) async {
-    if (selectedIndices.isEmpty || _isSubmitting) return;
-
-    setState(() {
-      _isSubmitting = true;
-    });
-
-    try {
-      final selectedMedications = selectedIndices
-          .map((index) => widget.medications[index])
-          .toList();
-
-      final medicationProvider = context.read<MedicationProvider>();
-
-      // 선택된 각 약물에 대해 복약 기록 생성
-      for (final medication in selectedMedications) {
-        await medicationProvider.createMedicationRecord(
-          cycleId: widget.cycleId,
-          medicationDetailId: medication.medicationDetailId,
-          recordType: action.apiValue,
-          recordDate: DateTime.now(),
-          quantityTaken: action == MedicationRecordAction.taken ? 1.0 : 0.0,
-          notes: '${widget.dosagePattern} - ${action.displayName}',
-          symptoms: action == MedicationRecordAction.sideEffect ? '부작용 보고됨' : '',
-        );
-      }
-
-      // 성공 시 UI 상태 업데이트
-      setState(() {
-        selectedIndices.clear();
-      });
-
-      // 성공 메시지 표시
-      _showSuccessMessage(action, selectedMedications.length);
-
-      // 콜백 호출
-      if (widget.onRecordSubmitted != null) {
-        widget.onRecordSubmitted!(selectedMedications, action);
-      }
-
-    } catch (e) {
-      // 에러 처리
-      _showErrorMessage(e.toString());
-    } finally {
-      setState(() {
-        _isSubmitting = false;
-      });
-    }
-  }
-
-  void _showSuccessMessage(MedicationRecordAction action, int count) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(Icons.check_circle, color: Colors.white),
-            SizedBox(width: 8),
-            Text('${action.displayName} 기록이 완료되었습니다 ($count개)'),
-          ],
-        ),
-        backgroundColor: action.color,
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
-
-  void _showErrorMessage(String error) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(Icons.error, color: Colors.white),
-            SizedBox(width: 8),
-            Expanded(child: Text('기록 저장 실패: $error')),
-          ],
-        ),
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
       ),
     );
   }

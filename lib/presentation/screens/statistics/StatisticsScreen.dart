@@ -645,7 +645,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 1월 1주차 - 리튬 (기분안정제)
       MedicationRecordModel(
         id: 1,
-        cycleId: 101,
         medicationDetail: MedicationDetailModel(
           id: 1,
           cycleId: 101,
@@ -666,6 +665,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 58,
           unit: "mg",
           specialInstructions: "식후 복용, 충분한 수분 섭취",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 1, 5, 9, 0),
           updatedAt: DateTime(2024, 1, 5, 9, 0),
         ),
@@ -681,7 +682,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 1월 1주차 - 로라제팜 (항불안제)
       MedicationRecordModel(
         id: 2,
-        cycleId: 102,
         medicationDetail: MedicationDetailModel(
           id: 2,
           cycleId: 102,
@@ -702,6 +702,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 29,
           unit: "mg",
           specialInstructions: "심한 불안감시에만 복용, 하루 최대 3회",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 1, 5, 9, 0),
           updatedAt: DateTime(2024, 1, 5, 9, 0),
         ),
@@ -717,7 +719,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 1월 2주차 - 쿠에티아핀 추가 (항정신병약)
       MedicationRecordModel(
         id: 3,
-        cycleId: 103,
         medicationDetail: MedicationDetailModel(
           id: 3,
           cycleId: 103,
@@ -738,6 +739,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 27,
           unit: "mg",
           specialInstructions: "취침 전 복용, 졸음 유발 가능",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 1, 12, 10, 0),
           updatedAt: DateTime(2024, 1, 12, 10, 0),
         ),
@@ -753,7 +756,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 1월 3주차 - 리튬 복용 기록
       MedicationRecordModel(
         id: 4,
-        cycleId: 101,
         medicationDetail: MedicationDetailModel(
           id: 1,
           cycleId: 101,
@@ -774,6 +776,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 42,
           unit: "mg",
           specialInstructions: "식후 복용, 충분한 수분 섭취",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 1, 5, 9, 0),
           updatedAt: DateTime(2024, 1, 20, 9, 0),
         ),
@@ -791,7 +795,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 2월 1주차 - 메틸페니데이트 추가 (ADHD 치료)
       MedicationRecordModel(
         id: 5,
-        cycleId: 104,
         medicationDetail: MedicationDetailModel(
           id: 4,
           cycleId: 104,
@@ -812,6 +815,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 59,
           unit: "mg",
           specialInstructions: "아침, 점심 식후 복용, 오후 4시 이후 금지",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 2, 3, 11, 0),
           updatedAt: DateTime(2024, 2, 3, 11, 0),
         ),
@@ -827,7 +832,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 2월 2주차 - 쿠에티아핀 용량 증량
       MedicationRecordModel(
         id: 6,
-        cycleId: 105,
         medicationDetail: MedicationDetailModel(
           id: 5,
           cycleId: 105,
@@ -848,6 +852,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 27,
           unit: "mg",
           specialInstructions: "취침 전 복용, 용량 증가로 인한 졸음 주의",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 2, 10, 10, 30),
           updatedAt: DateTime(2024, 2, 10, 10, 30),
         ),
@@ -863,7 +869,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 2월 3주차 - 메틸페니데이트 효과 확인
       MedicationRecordModel(
         id: 7,
-        cycleId: 104,
         medicationDetail: MedicationDetailModel(
           id: 4,
           cycleId: 104,
@@ -884,6 +889,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 45,
           unit: "mg",
           specialInstructions: "아침, 점심 식후 복용, 오후 4시 이후 금지",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 2, 3, 11, 0),
           updatedAt: DateTime(2024, 2, 18, 11, 0),
         ),
@@ -901,7 +908,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 3월 1주차 - 세르트랄린 추가 (항우울제)
       MedicationRecordModel(
         id: 8,
-        cycleId: 106,
         medicationDetail: MedicationDetailModel(
           id: 6,
           cycleId: 106,
@@ -922,6 +928,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 27,
           unit: "mg",
           specialInstructions: "아침 식후 복용, 우울 증상 개선 목적",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 3, 2, 9, 15),
           updatedAt: DateTime(2024, 3, 2, 9, 15),
         ),
@@ -937,7 +945,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 3월 2주차 - 로라제팜 용량 감소
       MedicationRecordModel(
         id: 9,
-        cycleId: 107,
         medicationDetail: MedicationDetailModel(
           id: 7,
           cycleId: 107,
@@ -958,6 +965,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 19,
           unit: "mg",
           specialInstructions: "의존성 방지를 위해 용량 감소, 필요시에만",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 3, 9, 14, 0),
           updatedAt: DateTime(2024, 3, 9, 14, 0),
         ),
@@ -973,7 +982,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 3월 3주차 - 메틸페니데이트 용량 증량
       MedicationRecordModel(
         id: 10,
-        cycleId: 108,
         medicationDetail: MedicationDetailModel(
           id: 8,
           cycleId: 108,
@@ -994,6 +1002,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 59,
           unit: "mg",
           specialInstructions: "용량 증량, 부작용 관찰 필요",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 3, 16, 10, 30),
           updatedAt: DateTime(2024, 3, 16, 10, 30),
         ),
@@ -1009,7 +1019,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 3월 4주차 - 세르트랄린 용량 증량
       MedicationRecordModel(
         id: 11,
-        cycleId: 109,
         medicationDetail: MedicationDetailModel(
           id: 9,
           cycleId: 109,
@@ -1030,6 +1039,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 27,
           unit: "mg",
           specialInstructions: "용량 증량, 우울 증상 개선 목적",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 3, 23, 9, 0),
           updatedAt: DateTime(2024, 3, 23, 9, 0),
         ),
@@ -1047,7 +1058,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 4월 1주차 - 올란자핀 추가 (항정신병약)
       MedicationRecordModel(
         id: 12,
-        cycleId: 110,
         medicationDetail: MedicationDetailModel(
           id: 10,
           cycleId: 110,
@@ -1068,6 +1078,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 27,
           unit: "mg",
           specialInstructions: "취침 전 복용, 체중 증가 주의",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 4, 6, 15, 0),
           updatedAt: DateTime(2024, 4, 6, 15, 0),
         ),
@@ -1083,7 +1095,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 4월 2주차 - 쿠에티아핀 중단
       MedicationRecordModel(
         id: 13,
-        cycleId: 105,
         medicationDetail: MedicationDetailModel(
           id: 5,
           cycleId: 105,
@@ -1104,6 +1115,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 10,
           unit: "mg",
           specialInstructions: "올란자핀으로 대체하여 점진적 중단",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 2, 10, 10, 30),
           updatedAt: DateTime(2024, 4, 14, 10, 30),
         ),
@@ -1119,7 +1132,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 4월 3주차 - 리튬 혈중농도 모니터링
       MedicationRecordModel(
         id: 14,
-        cycleId: 101,
         medicationDetail: MedicationDetailModel(
           id: 1,
           cycleId: 101,
@@ -1140,6 +1152,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 15,
           unit: "mg",
           specialInstructions: "혈중농도 정기 모니터링 필요",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 1, 5, 9, 0),
           updatedAt: DateTime(2024, 4, 21, 9, 0),
         ),
@@ -1155,7 +1169,6 @@ class _StatisticsScreenState extends State<StatisticsScreen>
       // 4월 4주차 - 최종 처방 상태 확인
       MedicationRecordModel(
         id: 15,
-        cycleId: 108,
         medicationDetail: MedicationDetailModel(
           id: 8,
           cycleId: 108,
@@ -1176,6 +1189,8 @@ class _StatisticsScreenState extends State<StatisticsScreen>
           remainingQuantity: 30,
           unit: "mg",
           specialInstructions: "현재 용량에서 안정적 유지",
+          patientAdjustments: Map(),
+          actualDosagePattern: Map(),
           createdAt: DateTime(2024, 3, 16, 10, 30),
           updatedAt: DateTime(2024, 4, 28, 10, 30),
         ),

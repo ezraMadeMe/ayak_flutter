@@ -258,10 +258,30 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildQuickRecordButton('복용함', Icons.check_circle, const Color(0xFF28A745)),
-              _buildQuickRecordButton('누락', Icons.cancel, const Color(0xFFDC3545)),
-              _buildQuickRecordButton('건너뜀', Icons.skip_next, const Color(0xFFFFC107)),
-              _buildQuickRecordButton('부작용', Icons.warning, const Color(0xFFFF6B35)),
+              _buildQuickRecordButton(
+                '복용함', 
+                Icons.check_circle, 
+                const Color(0xFF28A745),
+                MedicationRecordAction.taken,
+              ),
+              _buildQuickRecordButton(
+                '누락', 
+                Icons.cancel, 
+                const Color(0xFFDC3545),
+                MedicationRecordAction.missed,
+              ),
+              _buildQuickRecordButton(
+                '건너뜀', 
+                Icons.skip_next, 
+                const Color(0xFFFFC107),
+                MedicationRecordAction.skipped,
+              ),
+              _buildQuickRecordButton(
+                '부작용', 
+                Icons.warning, 
+                const Color(0xFFFF6B35),
+                MedicationRecordAction.sideEffect,
+              ),
             ],
           ),
         ],
@@ -398,9 +418,46 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildQuickRecordButton(String label, IconData icon, Color color) {
+  Widget _buildQuickRecordButton(String label, IconData icon, Color color, MedicationRecordAction action) {
     return GestureDetector(
-      onTap: () => _recordMedication(label),
+      onTap: () {
+        final medicationProvider = context.read<MedicationProvider>();
+        final selectedMedications = context.read<EnhancedMedicationProvider>().selectedMedications;
+        
+        if (selectedMedications.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('선택된 약물이 없습니다.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return;
+        }
+
+        // 선택된 약물들에 대해 기록 생성
+        for (final medication in selectedMedications) {
+          medicationProvider.createMedicationRecord(
+            cycleId: 1, // 실제 cycleId로 변경 필요
+            medicationDetailId: medication.medicationDetailId,
+            recordType: action.apiValue,
+            recordDate: DateTime.now(),
+            quantityTaken: action == MedicationRecordAction.taken ? 1.0 : 0.0,
+            notes: '${medication.name} - ${action.displayName}',
+            symptoms: action == MedicationRecordAction.sideEffect ? '부작용 보고됨' : '',
+          );
+        }
+
+        // 선택 초기화
+        context.read<EnhancedMedicationProvider>().clearSelection();
+
+        // 성공 메시지 표시
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${selectedMedications.length}개 약물 ${action.displayName} 처리 완료'),
+            backgroundColor: color,
+          ),
+        );
+      },
       child: Column(
         children: [
           Container(
@@ -421,15 +478,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  void _recordMedication(String type) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('복약 기록: $type'),
-        backgroundColor: const Color(0xFF28A745),
       ),
     );
   }

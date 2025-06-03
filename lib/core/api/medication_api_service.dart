@@ -1,10 +1,14 @@
-
 // medication_api_service.dart
+
 import 'package:yakunstructuretest/core/api/api_service.dart';
 import 'package:yakunstructuretest/data/models/medication_item.dart';
 import 'package:yakunstructuretest/data/models/medication_record_model.dart';
 
 class MedicationApiService extends ApiService {
+  // 싱글톤 패턴
+  static final MedicationApiService _instance = MedicationApiService._internal();
+  factory MedicationApiService() => _instance;
+  MedicationApiService._internal() : super();
 
   /// 오늘의 복약 데이터 조회
   Future<ApiResponse<TodayMedicationData>> getTodayMedications({
@@ -15,7 +19,7 @@ class MedicationApiService extends ApiService {
     if (date != null) queryParams['date'] = date;
     if (groupId != null) queryParams['group_id'] = groupId;
 
-    return _makeRequest<TodayMedicationData>(
+    return makeRequest<TodayMedicationData>(
       method: 'GET',
       endpoint: '/medications/today',
       queryParams: queryParams,
@@ -25,7 +29,7 @@ class MedicationApiService extends ApiService {
 
   /// 다음 복약 시간 조회
   Future<ApiResponse<NextDosageData>> getNextDosageTime() async {
-    return _makeRequest<NextDosageData>(
+    return makeRequest<NextDosageData>(
       method: 'GET',
       endpoint: '/medications/next-dosage',
       fromJson: (json) => NextDosageData.fromJson(json),
@@ -48,7 +52,7 @@ class MedicationApiService extends ApiService {
       'symptoms': symptoms,
     };
 
-    return _makeRequest<MedicationRecordModel>(
+    return makeRequest<MedicationRecordModel>(
       method: 'POST',
       endpoint: '/medications/records',
       data: data,
@@ -64,7 +68,7 @@ class MedicationApiService extends ApiService {
       'records': records.map((r) => r.toJson()).toList(),
     };
 
-    return _makeRequest<BulkRecordResponse>(
+    return makeRequest<BulkRecordResponse>(
       method: 'POST',
       endpoint: '/medications/records/bulk',
       data: data,
@@ -85,7 +89,7 @@ class MedicationApiService extends ApiService {
     if (groupId != null) queryParams['group_id'] = groupId;
     if (recordType != null) queryParams['record_type'] = recordType;
 
-    return _makeRequest<MedicationRecordsData>(
+    return makeRequest<MedicationRecordsData>(
       method: 'GET',
       endpoint: '/medications/records',
       queryParams: queryParams,
