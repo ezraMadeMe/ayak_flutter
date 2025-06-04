@@ -1,19 +1,13 @@
 // api_service.dart
 import 'dart:convert';
 import 'dart:ui';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yakunstructuretest/data/models/medication_record_model.dart';
-import 'package:yakunstructuretest/presentation/screens/home/PillGrid.dart';
 
-class ApiService {
-  static const String baseUrl = 'https://your-api-domain.com/api';
+abstract class ApiService {
+  static const String baseUrl = 'https://127.0.0.1:8000/api';
   static const String _tokenKey = 'auth_token';
-
-  // 싱글톤 패턴
-  static final ApiService _instance = ApiService._internal();
-  factory ApiService() => _instance;
-  ApiService._internal();
 
   // 인증 토큰 관리
   Future<String?> _getAuthToken() async {
@@ -30,7 +24,8 @@ class ApiService {
   }
 
   // HTTP 요청 래퍼
-  Future<ApiResponse<T>> _makeRequest<T>({
+  @protected
+  Future<ApiResponse<T>> makeRequest<T>({
     required String method,
     required String endpoint,
     Map<String, dynamic>? data,

@@ -1,11 +1,12 @@
 // enhanced_medication_provider.dart
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:yakunstructuretest/core/api/api_client.dart';
 import 'package:yakunstructuretest/core/api/medication_api_service.dart';
 import 'package:yakunstructuretest/data/models/medication_group_model.dart';
 import 'package:yakunstructuretest/data/models/medication_item.dart';
 import 'package:yakunstructuretest/data/models/medication_record_model.dart';
+import 'package:yakunstructuretest/data/models/medication_stats_model.dart';
+import 'package:yakunstructuretest/data/models/pill_data_model.dart';
 
 class EnhancedMedicationProvider with ChangeNotifier {
   final MedicationApiService _apiService = MedicationApiService();
@@ -85,17 +86,19 @@ class EnhancedMedicationProvider with ChangeNotifier {
     final firstGroup = _medicationGroups.first;
     if (firstGroup.dosageTimes.isEmpty) return null;
 
-    final firstTime = firstGroup.dosageTimes.first;
-    final medications = firstGroup.medicationsByTime[firstTime] ?? [];
-    final completionStatus = firstGroup.completionStatus[firstTime];
-
     return MedicationGroupTimeData(
       groupId: firstGroup.groupId,
       groupName: firstGroup.groupName,
-      dosageTime: firstTime,
-      medications: medications,
-      completionStatus: completionStatus,
-      pillDataList: firstGroup.toPillDataList(firstTime),
+      dosageTime: firstGroup.dosageTimes.first,
+      medicationsByTime: firstGroup.medicationsByTime,
+      pillDataList: firstGroup.toPillDataList(firstGroup.dosageTimes.first),
+      completionStatus: {
+        firstGroup.dosageTimes.first: CompletionStatus(
+          total: firstGroup.medicationsByTime[firstGroup.dosageTimes.first]?.length ?? 0,
+          taken: 0,
+          completionRate: 0.0,
+        ),
+      },
     );
   }
 
@@ -155,7 +158,7 @@ class EnhancedMedicationProvider with ChangeNotifier {
         // 성공한 기록들에 대해 로컬 상태 업데이트
         for (final record in result.createdRecords) {
           await _updateLocalRecordStatus(
-            record.medicationDetailId,
+            record.medicationDetail.id,
             record.recordType,
           );
         }
@@ -219,7 +222,7 @@ class EnhancedMedicationProvider with ChangeNotifier {
   }
 
   /// 완료 상태 재계산
-  void _recalculateCompletionStatus(MedicationGroupTimeData group, String timeKey) {
+  void _recalculateCompletionStatus(MedicationGroupModel group, String timeKey) {
     final medications = group.medicationsByTime[timeKey] ?? [];
     final total = medications.length;
     final taken = medications.where((m) => m.isTakenToday).length;
@@ -237,9 +240,12 @@ class EnhancedMedicationProvider with ChangeNotifier {
     int totalTaken = 0;
 
     for (final group in _medicationGroups) {
-      for (final status in group.completionStatus.values) {
-        totalMedications += status.total;
-        totalTaken += status.taken;
+      for (final timeKey in group.medicationsByTime.keys) {
+        final status = group.completionStatus[timeKey];
+        if (status != null) {
+          totalMedications += status.total;
+          totalTaken += status.taken;
+        }
       }
     }
 
@@ -249,6 +255,8 @@ class EnhancedMedicationProvider with ChangeNotifier {
       totalMissed: totalMedications - totalTaken,
       overallCompletionRate: totalMedications > 0 ? totalTaken / totalMedications : 0.0,
     );
+
+    notifyListeners();
   }
 
   /// 오늘의 복약 현황 요약 (HomeScreen용)
@@ -303,105 +311,5 @@ class EnhancedMedicationProvider with ChangeNotifier {
   }
 }
 
-// === 추가 데이터 모델들 ===
 
-/// 복약그룹의 특정 시간대 데이터
-class MedicationGroupTimeData {
-  final String groupId;
-  final String groupName;
-  final String dosageTime;
-  final List<MedicationItemData> medications;
-  final CompletionStatus? completionStatus;
-  final List<PillData> pillDataList;
 
-  MedicationGroupTimeData({
-    required this.groupId,
-    required this.groupName,
-    required this.dosageTime,
-    required this.medications,
-    this.completionStatus,
-    required this.pillDataList,
-  });
-
-  String get dosageTimeDisplayName {
-    switch (dosageTime) {
-      case 'morning':
-        return '아침';
-      case 'lunch':
-        return '점심';
-      case 'evening':
-        return '저녁';
-      case 'bedtime':
-        return '취침전';
-      case 'prn':
-        return '필요시';
-      default:
-        return dosageTime;
-    }
-  }
-}
-
-/// 복수 기록 생성 결과
-class BulkRecordResult {
-  final bool success;
-  final int? totalRequested;
-  final int? totalCreated;
-  final int? totalFailed;
-  final List<Map<String, dynamic>>? failedRecords;
-  final String message;
-
-  BulkRecordResult({
-    required this.success,
-    this.totalRequested,
-    this.totalCreated,
-    this.totalFailed,
-    this.failedRecords,
-    required this.message,
-  });
-
-  bool get hasPartialFailure => totalFailed != null && totalFailed! > 0;
-
-  String get summaryMessage {
-    if (!success) return message;
-
-    if (totalCreated == totalRequested) {
-      return '$totalCreated개 복약 기록이 모두 성공적으로 저장되었습니다.';
-    } else {
-      return '$totalCreated개 성공, $totalFailed개 실패';
-    }
-  }
-}
-
-/// HomeScreen에서 사용하는 오늘의 복약 현황
-class TodayMedicationStatus {
-  final int taken;
-  final int missed;
-  final int pending;
-  final double completionRate;
-
-  TodayMedicationStatus({
-    required this.taken,
-    required this.missed,
-    required this.pending,
-    required this.completionRate,
-  });
-
-  int get total => taken + missed + pending;
-}
-
-// === PillData 모델 (기존 PillGrid.dart에서 이동) ===
-class PillData {
-  final String name;
-  final Color color;
-  final String shape;
-  final int medicationDetailId;
-  final String? imageUrl;
-
-  PillData({
-    required this.name,
-    required this.color,
-    required this.shape,
-    required this.medicationDetailId,
-    this.imageUrl,
-  });
-}

@@ -35,18 +35,3 @@ class MedicationModel {
     );
   }
 }
-
-
-class TodayMedicationStatus {
-  final int taken;
-  final int missed;
-  final int pending;
-  final double completionRate;
-
-  TodayMedicationStatus({
-    required this.taken,
-    required this.missed,
-    required this.pending,
-    required this.completionRate,
-  });
-}
