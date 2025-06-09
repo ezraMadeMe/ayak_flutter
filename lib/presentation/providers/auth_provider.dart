@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:yakunstructuretest/core/api/auth_api_service.dart';
 import 'package:yakunstructuretest/core/storage/secure_storage.dart';
@@ -175,6 +173,7 @@ class AuthProvider with ChangeNotifier {
   /// 소셜 로그인
   Future<bool> socialLogin({
     required String socialProvider,
+    required String userId,
     required String socialId,
     String? socialToken,
     String? userName,
@@ -185,9 +184,7 @@ class AuthProvider with ChangeNotifier {
     _clearError();
 
     try {
-      print('소셜 로그인 시도: $socialProvider');
-      
-      // 타임아웃 설정
+      print("REUEST : $socialProvider $socialId $socialToken $userName $email $profileImageUrl $userId");
       final response = await _authService.socialLogin(
         socialProvider: socialProvider,
         socialId: socialId,
@@ -195,41 +192,30 @@ class AuthProvider with ChangeNotifier {
         userName: userName,
         email: email,
         profileImageUrl: profileImageUrl,
-      ).timeout(
-        Duration(seconds: 10),
-        onTimeout: () {
-          throw TimeoutException('소셜 로그인 요청 시간이 초과되었습니다.');
-        },
+        userId: userId,
       );
 
-      print('서버 응답 수신: ${response.success}');
+      print("RESPONSE : ${response.data}");
 
       if (response.success && response.data != null) {
         final authResponse = response.data!;
         _currentUser = authResponse.user;
 
-        print('사용자 정보 저장 시작');
         // 로컬 스토리지에 저장
         await _saveUserDataToStorage(
           authResponse.user,
           authResponse.accessToken,
           authResponse.refreshToken,
         );
-        print('사용자 정보 저장 완료');
 
         _setAuthState(AuthState.authenticated);
         return true;
       } else {
-        _setError(response.message ?? '알 수 없는 오류가 발생했습니다.');
+        _setError(response.message);
         return false;
       }
     } catch (e) {
-      print('소셜 로그인 에러: $e');
-      if (e is TimeoutException) {
-        _setError('서버 응답 시간이 초과되었습니다. 다시 시도해주세요.');
-      } else {
-        _setError('소셜 로그인 실패: ${e.toString()}');
-      }
+      _setError('소셜 로그인 실패: ${e.toString()}');
       return false;
     } finally {
       _setLoading(false);

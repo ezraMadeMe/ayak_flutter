@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_naver_login/flutter_naver_login.dart';
+import 'package:flutter_naver_login/interface/types/naver_login_result.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +45,16 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
 
   // 자동 로그인 체크
-  final isLoggedIn = await KakaoAuthService.isLoggedIn();
+  final isKakaoLoggedIn = await KakaoAuthService.isLoggedIn();
+  bool isLoggedIn = false;
+  try {
+    final response = await FlutterNaverLogin.isLoggedIn();
+    isLoggedIn = response == true;
+  }catch(e){
+    print('네이버 로그인 오류: $e');
+    isLoggedIn = false; // 오류 시 기본값으로 false 설정
+  }
+
 
   runApp(
     MultiProvider(

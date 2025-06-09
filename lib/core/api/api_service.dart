@@ -38,15 +38,13 @@ class ApiResponse<T> {
 }
 
 class ApiService {
-  static const String baseUrl = 'http://172.30.1.57:8000/api/v1'; // 실제 API 서버 주소로 변경 필요
+  static const String baseUrl = 'http://172.30.1.50:8000/api/v1'; // 실제 API 서버 주소로 변경 필요
   static const int timeoutDuration = 30; // 초 단위
 
   // 인증이 필요하지 않은 엔드포인트 목록
   static const List<String> _noAuthEndpoints = [
-    '/user/auth/login',
-    '/user/auth/register',
-    '/user/auth/social-login',
-    'user/auth/login',  // auth_api_service.dart에서 사용하는 엔드포인트
+    '/user/auth/register/',
+    '/user/auth/login/',
   ];
 
   final Map<String, String> _defaultHeaders = {
@@ -62,6 +60,7 @@ class ApiService {
     Map<String, String>? queryParams,
     bool requiresAuth = true,
   }) async {
+    print("REQUEST : $fromJson $data");
     try {
       // 인증 토큰 가져오기
       String? token;
@@ -76,6 +75,7 @@ class ApiService {
 
       // URL 생성
       var uri = Uri.parse('$baseUrl$endpoint');
+
       if (queryParams != null) {
         uri = uri.replace(queryParameters: queryParams);
       }
@@ -129,6 +129,7 @@ class ApiService {
       // 응답 처리
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final jsonResponse = json.decode(response.body);
+        print("JSON : $jsonResponse");
         return ApiResponse.fromJson(jsonResponse, fromJson);
       }
 

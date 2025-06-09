@@ -45,6 +45,7 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   kakao_flutter_sdk_user: ^1.9.7+3
   google_sign_in: ^6.3.0
+  flutter_naver_login: ^2.1.1
 
 
 
@@ -71,6 +72,8 @@ flutter:
     - assets/logo/
     - assets/medication_records.json
     - assets/images/IMG_20201202_001106.png
+    - assets/logo/bokyak_cycle.png
+    - assets/logo/symptom.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

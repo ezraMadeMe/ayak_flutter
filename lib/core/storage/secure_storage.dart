@@ -111,9 +111,9 @@ class UserModel {
   final String? phoneNumber;
   final DateTime? birthDate;
   final String? gender;
-  final bool pushAgree;
-  final bool notificationEnabled;
-  final bool marketingAgree;
+  final bool? pushAgree;
+  final bool? notificationEnabled;
+  final bool? marketingAgree;
   final DateTime joinDate;
   final DateTime? lastLoginDate;
   final String? socialProvider;
@@ -126,15 +126,16 @@ class UserModel {
     this.phoneNumber,
     this.birthDate,
     this.gender,
-    required this.pushAgree,
-    required this.notificationEnabled,
-    required this.marketingAgree,
+    this.pushAgree,
+    this.notificationEnabled,
+    this.marketingAgree,
     required this.joinDate,
     this.lastLoginDate,
     this.socialProvider,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
+    print("FACTORY JSON : $json");
     return UserModel(
       userId: json['user_id'],
       userName: json['user_name'],
@@ -180,21 +181,19 @@ class AuthResponse {
   final UserModel user;
   final String accessToken;
   final String refreshToken;
-  final bool isNewUser;
 
   AuthResponse({
     required this.user,
     required this.accessToken,
     required this.refreshToken,
-    required this.isNewUser,
   });
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
+    print("FROM JSON : $json");
     return AuthResponse(
       user: UserModel.fromJson(json['user']),
-      accessToken: json['access_token'],
-      refreshToken: json['refresh_token'],
-      isNewUser: json['is_new_user'] ?? false,
+      accessToken: json['tokens']['access'],
+      refreshToken: json['tokens']['refresh'],
     );
   }
 }

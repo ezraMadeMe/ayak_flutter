@@ -1,9 +1,15 @@
 // presentation/screens/auth/login_screen.dart
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_naver_login/interface/types/naver_account_result.dart';
+import 'package:flutter_naver_login/interface/types/naver_login_result.dart';
+import 'package:flutter_naver_login/interface/types/naver_login_status.dart';
+import 'package:flutter_naver_login/interface/types/naver_token.dart';
 import 'package:provider/provider.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:yakunstructuretest/core/constants/app_colors.dart';
 import 'package:yakunstructuretest/presentation/providers/auth_provider.dart';
 
@@ -350,27 +356,19 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       children: [
         _buildSocialButton(
-          '구글로 시작하기',
-          'assets/logo/google.png',
+          '네이버로 시작하기',
+          'assets/logo/bokyak_cycle.png',
+          Color(0xFF03C75A),
           Colors.white,
-          Colors.black87,
-          () => _handleSocialLogin('google'),
+          () => _handleSocialLogin('naver'),
         ),
         SizedBox(height: 12),
         _buildSocialButton(
           '카카오로 시작하기',
-          'assets/logo/kakao.png',
+          'assets/logo/symptom.png',
           Color(0xFFFFE812),
           Color(0xFF3C1E1E),
           () => _handleSocialLogin('kakao'),
-        ),
-        SizedBox(height: 12),
-        _buildSocialButton(
-          'Apple로 시작하기',
-          'assets/logo/apple.png',
-          Colors.black,
-          Colors.white,
-          () => _handleSocialLogin('apple'),
         ),
       ],
     );
@@ -474,27 +472,29 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final authProvider = context.read<AuthProvider>();
       Map<String, dynamic>? socialResult;
-
+      print("provider : $provider");
       switch (provider) {
-        case 'google':
-          socialResult = await _signInWithGoogle();
+        case 'naver':
+          socialResult = await _signInWithNaver();
           break;
         case 'kakao':
           socialResult = await _signInWithKakao();
           break;
-        case 'apple':
-          socialResult = await _signInWithApple();
-          break;
       }
+
+      print("socialResult: $socialResult");
 
       if (socialResult != null && mounted) {
         final success = await authProvider.socialLogin(
           socialProvider: provider,
-          socialId: socialResult['id'],
+          userId: socialResult['user_id'],
+          socialId: socialResult['social_id'],
           userName: socialResult['name'] ?? socialResult['nickname'],
           email: socialResult['email'],
           profileImageUrl: socialResult['picture'] ?? socialResult['profile_image'],
         );
+
+        print("success : $success");
 
         if (success && mounted) {
           Navigator.of(context).pushReplacementNamed('/home');
@@ -518,34 +518,41 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<Map<String, dynamic>?> _signInWithGoogle() async {
+  Future<Map<String, dynamic>?> _signInWithNaver() async {
     try {
-      final GoogleSignIn googleSignIn = GoogleSignIn(
-        scopes: [
-          'email',
-          'profile',
-        ],
-      );
-
-      // 기존 로그인 정보가 있다면 로그아웃
-      await googleSignIn.signOut();
+      print('네이버 로그인 시작');
       
-      // 구글 로그인 시도
-      final GoogleSignInAccount? account = await googleSignIn.signIn();
-      if (account == null) return null;
+      // 기존 로그인 정보가 있다면 로그아웃
+      await FlutterNaverLogin.logOut();
+      
+      final NaverLoginResult result = await FlutterNaverLogin.logIn();
+      
+      if (result.status == NaverLoginStatus.loggedIn) {
+        print('네이버 로그인 성공');
+        
+        // 사용자 정보 요청
+        final NaverAccountResult response = await FlutterNaverLogin.getCurrentAccount();
+        final NaverToken token = await FlutterNaverLogin.getCurrentAccessToken();
+        print('네이버 액세스 토큰: ${token.accessToken}');
+        print('네이버 사용자 정보: ${response.toMap()}');
 
-      // 구글 인증 정보 획득
-      final GoogleSignInAuthentication auth = await account.authentication;
+        RegExp pattern = RegExp(r'^([a-zA-Z0-9._-]+)@');
+        Match? match = pattern.firstMatch(response.email!);
 
-      return {
-        'id': account.id,
-        'name': account.displayName ?? '',
-        'email': account.email,
-        'picture': account.photoUrl,
-        'token': auth.accessToken,  // 서버 인증에 필요할 수 있음
-      };
+        return {
+          'user_id': match?.group(1) ?? "",
+          'social_id' : response.id,
+          'name': response.name,
+          'email': response.email,
+          'profile_image': response.profileImage,
+          'token': token.accessToken,
+        };
+      } else {
+        print('네이버 로그인 취소 또는 실패');
+        return null;
+      }
     } catch (e) {
-      print('Google Sign-In 실패: $e');
+      print('Naver Sign-In 실패 (상세): $e');
       rethrow;
     }
   }
@@ -581,11 +588,12 @@ class _LoginScreenState extends State<LoginScreen> {
       // 사용자 정보 요청
       print('사용자 정보 요청 시작');
       User user = await UserApi.instance.me();
-      print('사용자 정보 요청 성공: ${user.id}');
+      print('사용자 정보 요청 성공: ${user.uuid}');
 
       return {
-        'id': user.id.toString(),
-        'nickname': user.kakaoAccount?.profile?.nickname,
+        'user_id': user.id.toString(),
+        'social_id' : user.id.toString(),
+        'name': user.kakaoAccount?.profile?.nickname,
         'email': user.kakaoAccount?.email,
         'profile_image': user.kakaoAccount?.profile?.profileImageUrl,
         'token': await TokenManagerProvider.instance.manager.getToken(),
@@ -594,15 +602,6 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Kakao Sign-In 실패 (상세): $e');
       rethrow;
     }
-  }
-
-  Future<Map<String, dynamic>?> _signInWithApple() async {
-    await Future.delayed(Duration(seconds: 1));
-    return {
-      'id': 'apple_test_${DateTime.now().millisecondsSinceEpoch}',
-      'name': 'Apple 테스트',
-      'email': 'test@icloud.com',
-    };
   }
 }
 

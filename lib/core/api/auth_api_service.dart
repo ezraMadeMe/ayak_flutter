@@ -1,4 +1,3 @@
-
 // core/api/auth_api_service.dart
 import 'package:yakunstructuretest/core/api/api_service.dart';
 import 'package:yakunstructuretest/core/storage/secure_storage.dart';
@@ -23,20 +22,19 @@ class AuthApiService extends ApiService {
   }) async {
     final data = {
       'user_name': userName,
-      if (email != null) 'email': email,
-      if (password != null) 'password': password,
-      if (confirmPassword != null) 'confirm_password': confirmPassword,
-      if (phoneNumber != null) 'phone_number': phoneNumber,
-      if (birthDate != null) 'birth_date': birthDate.toIso8601String().split('T')[0],
-      if (gender != null) 'gender': gender,
+      'email': email,
+      'password': confirmPassword,
+      'phone_number': phoneNumber,
+      'birth_date': birthDate,
+      'gender': gender,
       'push_agree': pushAgree,
       'notification_enabled': notificationEnabled,
-      'marketing_agree': marketingAgree,
+      'marketing_agree': marketingAgree
     };
 
     return makeRequest<AuthResponse>(
       method: 'POST',
-      endpoint: '/auth/register',
+      endpoint: '/auth/register/',
       data: data,
       fromJson: (json) => AuthResponse.fromJson(json),
     );
@@ -54,15 +52,17 @@ class AuthApiService extends ApiService {
 
     return makeRequest<AuthResponse>(
       method: 'POST',
-      endpoint: 'user/auth/login',
+      endpoint: 'user/auth/login/',
       data: data,
       fromJson: (json) => AuthResponse.fromJson(json),
+      requiresAuth: false,
     );
   }
 
   /// 소셜 로그인
   Future<ApiResponse<AuthResponse>> socialLogin({
     required String socialProvider,
+    required String userId,
     required String socialId,
     String? socialToken,
     String? userName,
@@ -70,19 +70,24 @@ class AuthApiService extends ApiService {
     String? profileImageUrl,
   }) async {
     final data = {
+      'user_id': userId,
+      'password': socialToken,
       'social_provider': socialProvider,
       'social_id': socialId,
-      if (socialToken != null) 'social_token': socialToken,
-      if (userName != null) 'user_name': userName,
-      if (email != null) 'email': email,
-      if (profileImageUrl != null) 'profile_image_url': profileImageUrl,
+      'social_token': socialToken,
+      'user_name': userName,
+      'email': email,
+      'profile_image_url': profileImageUrl,
     };
+
+    print("DATA : $data");
 
     return makeRequest<AuthResponse>(
       method: 'POST',
-      endpoint: '/user/auth/login',
+      endpoint: '/user/auth/login/',
       data: data,
       fromJson: (json) => AuthResponse.fromJson(json),
+      requiresAuth: false,
     );
   }
 
@@ -90,7 +95,7 @@ class AuthApiService extends ApiService {
   Future<ApiResponse<UserModel>> getUserProfile() async {
     return makeRequest<UserModel>(
       method: 'GET',
-      endpoint: '/user/auth/profile',
+      endpoint: '/user/auth/profile/',
       fromJson: (json) => UserModel.fromJson(json),
     );
   }
