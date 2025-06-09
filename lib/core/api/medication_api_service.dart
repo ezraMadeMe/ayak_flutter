@@ -1,7 +1,7 @@
 // medication_api_service.dart
 
 import 'package:yakunstructuretest/core/api/api_service.dart';
-import 'package:yakunstructuretest/data/models/medication_item.dart';
+import 'package:yakunstructuretest/data/models/check_dosage_models.dart';
 import 'package:yakunstructuretest/data/models/medication_record_model.dart';
 
 class MedicationApiService extends ApiService {

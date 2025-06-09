@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yakunstructuretest/data/models/medication_detail_model.dart';
 import 'package:yakunstructuretest/data/models/medication_model.dart';
 import 'package:yakunstructuretest/data/models/medication_record_model.dart';
+import 'package:yakunstructuretest/presentation/providers/enhanced_medication_provider.dart' hide TodayMedicationStatus;
 
 class ScheduleItem {
   final String id;

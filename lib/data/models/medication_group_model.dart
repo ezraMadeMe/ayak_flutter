@@ -3,7 +3,6 @@
 import 'dart:ui';
 
 import 'package:yakunstructuretest/data/models/medication_item.dart';
-import 'package:yakunstructuretest/data/models/user_model.dart';
 import 'package:yakunstructuretest/presentation/providers/enhanced_medication_provider.dart';
 import 'package:yakunstructuretest/presentation/screens/home/PillGrid.dart';
 // 복약 그룹 데이터 모델

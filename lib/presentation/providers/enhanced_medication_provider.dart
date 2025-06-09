@@ -1,12 +1,12 @@
 // enhanced_medication_provider.dart
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:yakunstructuretest/core/api/api_client.dart';
 import 'package:yakunstructuretest/core/api/medication_api_service.dart';
+import 'package:yakunstructuretest/data/models/check_dosage_models.dart';
 import 'package:yakunstructuretest/data/models/medication_group_model.dart';
-import 'package:yakunstructuretest/data/models/medication_item.dart';
-import 'package:yakunstructuretest/data/models/medication_record_model.dart';
-import 'package:yakunstructuretest/presentation/screens/home/PillGrid.dart';
+import 'package:yakunstructuretest/data/models/medication_item.dart' hide NextDosageData;
+
+
 
 class EnhancedMedicationProvider with ChangeNotifier {
   final MedicationApiService _apiService = MedicationApiService();
