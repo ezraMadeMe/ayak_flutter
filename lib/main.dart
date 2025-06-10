@@ -16,9 +16,11 @@ import 'package:yakunstructuretest/presentation/providers/medication_provider.da
 import 'package:yakunstructuretest/presentation/providers/prescription_provider.dart';
 import 'package:yakunstructuretest/presentation/providers/search_provider.dart';
 import 'package:yakunstructuretest/presentation/providers/enhanced_medication_provider.dart';
+import 'package:yakunstructuretest/presentation/providers/user_medical_info_provider.dart';
 import 'package:yakunstructuretest/presentation/screens/auth/login_screen.dart';
 import 'package:yakunstructuretest/presentation/screens/home/MainTabView.dart';
 import 'package:yakunstructuretest/presentation/screens/medication/MedicationScreen.dart';
+import 'package:yakunstructuretest/presentation/screens/medication/UserMedicalInfoRegisterScreen.dart';
 import 'package:yakunstructuretest/presentation/screens/prescriptions/PrescriptionRenewalScreen.dart';
 import 'package:yakunstructuretest/presentation/screens/search/HospitalSearchScreen.dart';
 import 'package:yakunstructuretest/presentation/screens/search/IllnessSearchScreen.dart';
@@ -68,16 +70,17 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HospitalProvider()),
         ChangeNotifierProvider(create: (_) => IllnessProvider()),
         ChangeNotifierProvider(create: (_) => EnhancedMedicationProvider()),
+        ChangeNotifierProvider(create: (_) => UserMedicalInfoProvider()),
       ],
       child: MaterialApp(
-        //home: MainTabView(),
-        home: isLoggedIn ? MainTabView() : LoginScreen(),
+        home: MainTabView(),
+        //home: isLoggedIn ? MainTabView() : LoginScreen(),
         routes: {
           '/home': (context) => MainTabView(),
           '/search': (context) => Scaffold(appBar: AppBar(title: Text('검색')), body: SearchScreen()),
           '/schedule': (context) => Scaffold(appBar: AppBar(title: Text('일정')), body: Center(child: Text('일정 화면'))),
           '/medication-group': (context) => Scaffold(appBar: AppBar(title: Text('그룹 등록')), body: Center(child: Text('그룹 등록 화면'))),
-          '/medication-cycle': (context) => Scaffold(appBar: AppBar(title: Text('사이클 등록')), body: Center(child: Text('사이클 등록 화면'))),
+          '/user-medical-info': (context) => Scaffold(appBar: AppBar(title: Text('의료 정보 등록')), body: UserMedicalInfoFlow()),
           '/medication-record': (context) => Scaffold(appBar: AppBar(title: Text('복약 기록')), body: MedicationScreen()),
           '/statistics': (context) => Scaffold(appBar: AppBar(title: Text('처방 통계')), body: StatisticsScreen()),
           '/prescription-renewal': (context) => Scaffold(appBar: AppBar(title: Text('처방전 갱신')), body: PrescriptionRenewalScreen()),

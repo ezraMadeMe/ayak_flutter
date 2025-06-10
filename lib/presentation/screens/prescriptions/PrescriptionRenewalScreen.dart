@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yakunstructuretest/data/models/prescription_renewal_model.dart';
 import 'package:yakunstructuretest/presentation/providers/auth_provider.dart';
-import 'package:yakunstructuretest/presentation/providers/enhanced_medication_provider.dart';
 import 'package:yakunstructuretest/presentation/providers/prescription_provider.dart';
 import 'package:yakunstructuretest/presentation/screens/home/PillGrid.dart';
+
 
 class PrescriptionRenewalScreen extends StatefulWidget {
   final ExpiringCycle? expiringCycle;
@@ -35,12 +35,13 @@ class _PrescriptionRenewalScreenState extends State<PrescriptionRenewalScreen> {
       '타이레놀', '타이레놀', '펜잘큐', '오메프라졸'
     ];
     return Scaffold(
-      appBar: AppBar(
-        title: Text('처방전 갱신'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 1,
-      ),
+      backgroundColor: const Color(0xFFF8FAFC),
+      // appBar: AppBar(
+      //   title: Text('처방전 갱신'),
+      //   backgroundColor: Colors.white,
+      //   foregroundColor: Colors.black,
+      //   elevation: 1,
+      // ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(

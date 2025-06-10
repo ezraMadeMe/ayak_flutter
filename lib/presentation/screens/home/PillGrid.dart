@@ -66,6 +66,24 @@ extension MedicationRecordActionExtension on MedicationRecordAction {
   }
 }
 
+class PillData {
+  final String name;
+  final Color color;
+  final String shape;
+  final int medicationDetailId;
+  final String? imageUrl;
+  final String? status;  // 추가: 복용 상태
+
+  PillData({
+    required this.name,
+    required this.color,
+    required this.shape,
+    required this.medicationDetailId,
+    this.imageUrl,
+    this.status,  // 추가
+  });
+}
+
 // 알약 그리드 위젯
 class MedicationGridWidget extends StatefulWidget {
   final String groupId; // 복약그룹 ID
@@ -306,6 +324,24 @@ class _MedicationGridWidgetState extends State<MedicationGridWidget>
                   ),
                 ),
               ),
+            if (medication.status != null)
+              Positioned(
+                top: 2,
+                right: 2,
+                child: Container(
+                  width: 16,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    color: _getStatusColor(medication.status!),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    _getStatusIcon(medication.status!),
+                    size: 12,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             Center(
               child: Text(
                 medication.name,
@@ -345,6 +381,36 @@ class _MedicationGridWidgetState extends State<MedicationGridWidget>
         ),
       ),
     );
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status.toUpperCase()) {
+      case 'TAKEN':
+        return Colors.green;
+      case 'MISSED':
+        return Colors.red;
+      case 'SKIPPED':
+        return Colors.orange;
+      case 'PENDING':
+        return Colors.grey;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  IconData _getStatusIcon(String status) {
+    switch (status.toUpperCase()) {
+      case 'TAKEN':
+        return Icons.check;
+      case 'MISSED':
+        return Icons.close;
+      case 'SKIPPED':
+        return Icons.skip_next;
+      case 'PENDING':
+        return Icons.schedule;
+      default:
+        return Icons.help_outline;
+    }
   }
 
   Widget _buildEmptySlot() {

@@ -45,8 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 // 상단 헤더
                 _buildHeader(),
 
-                // 메인 액션 섹션 (복약 관리 강조)
                 _buildMainActionSection(),
+
+                // 메인 액션 섹션 (복약 관리 강조)
+                _buildMainMedicationSection(),
 
                 // 긴급 알림 섹션
                 _buildUrgentNotifications(),
@@ -80,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: AppTextStyles.heading,
                 ),
               ),
+              SizedBox(height: 16),
             ],
           ),
           Row(
@@ -151,21 +154,19 @@ class _HomeScreenState extends State<HomeScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('복약 관리', style: AppTextStyles.titleBold),
-                  Text('오늘의 복용 현황을 확인하세요', style: AppTextStyles.caption),
+                  Text('주요 액션', style: AppTextStyles.titleBold),
+                  Text('블라블라', style: AppTextStyles.caption),
                 ],
               ),
+              SizedBox(height: 16),
             ],
           ),
-          // 오늘의 복약 현황
-          Consumer<MedicationProvider>(
-            builder: (context, provider, _) =>
-                _buildTodayMedicationStatus(provider),
-          ),
           SizedBox(height: 16),
-          // 빠른 액션 버튼들
           Row(
             children: [
+              SizedBox(width: 12),
+
+              SizedBox(height: 16),
               Expanded(
                 child: _buildQuickActionButton(
                   '처방전 갱신',
@@ -177,10 +178,10 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(width: 12),
               Expanded(
                 child: _buildQuickActionButton(
-                  '새로운 주기 등록',
+                  '의료정보 등록',
                   Icons.new_label_outlined,
                   Colors.blue,
-                  '/medication-cycle',
+                  '/user-medical-info',
                 ),
               ),
               SizedBox(width: 12),
@@ -199,8 +200,90 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildMainMedicationSection() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppColors.primary.withOpacity(0.1),
+            AppColors.secondary.withOpacity(0.15),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(Icons.medication, color: Colors.white, size: 20),
+              ),
+              SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('복약 관리', style: AppTextStyles.titleBold),
+                  Text('오늘의 복용 현황을 확인하세요', style: AppTextStyles.caption),
+                ],
+              ),
+              SizedBox(height: 16),
+            ],
+          ),
+          SizedBox(height: 16),
+          // 오늘의 복약 현황
+          Consumer<MedicationProvider>(
+            builder: (context, provider, _) =>
+                _buildTodayMedicationStatus(provider),
+          ),
+          SizedBox(height: 16),
+          // 빠른 액션 버튼들
+        ],
+      ),
+    );
+  }
+
   Widget _buildTodayMedicationStatus(MedicationProvider provider) {
     final todayStatus = provider.todayMedicationStatus;
+    final medicationData = {
+      "group_name": "복약그룹A",
+      "group_id": "group_001",
+      "total_completion_rate": 0.65,
+      "dosage_patterns": [
+        {
+          "pattern": "아침",
+          "dosage_count": 6,
+          "completion_rate": 1.0,
+          "medications": [
+            {"name": "낙센", "color": "0xFF4ECDC4", "shape": "oval", "medicationDetailId": 1, "status": "TAKEN"},
+            {"name": "아스피린", "color": "0xFF96CEB4", "shape": "round", "medicationDetailId": 2, "status": "TAKEN"},
+            {"name": "애드빌", "color": "0xFFFF6B35", "shape": "oval", "medicationDetailId": 3, "status": "TAKEN"},
+            {"name": "타이레놀", "color": "0xFFFFFFFF", "shape": "round", "medicationDetailId": 4, "status": "TAKEN"},
+            {"name": "펜잘큐", "color": "0xFF45B7D1", "shape": "round", "medicationDetailId": 5, "status": "TAKEN"},
+            {"name": "오메프라졸", "color": "0xFFDDA0DD", "shape": "capsule", "medicationDetailId": 6, "status": "TAKEN"}
+          ]
+        },
+        {
+          "pattern": "저녁",
+          "dosage_count": 4,
+          "completion_rate": 0.5,
+          "medications": [
+            {"name": "낙센", "color": "0xFF4ECDC4", "shape": "oval", "medicationDetailId": 7, "status": "MISSED"},
+            {"name": "아스피린", "color": "0xFF96CEB4", "shape": "round", "medicationDetailId": 8, "status": "TAKEN"},
+            {"name": "애드빌", "color": "0xFFFF6B35", "shape": "oval", "medicationDetailId": 9, "status": "SKIPPED"},
+            {"name": "타이레놀", "color": "0xFFFFFFFF", "shape": "round", "medicationDetailId": 10, "status": "PENDING"}
+          ]
+        }
+      ]
+    };
 
     return Container(
       padding: EdgeInsets.all(16),
@@ -217,44 +300,94 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: Column(
         children: [
-          Text('복약그룹A - 아침약', style: AppTextStyles.subtitle),
-          MedicationGridWidget(
-            groupId: 'group_001',
-            cycleId: 1,
-            dosagePattern: '아침',
-            medications: medications,
-            columnsPerRow: 6,
-            onRecordSubmitted: (selectedMedications, action) {
-              print('기록 완료: ${selectedMedications.length}개 약물, 액션: ${action.displayName}');
-              // 여기서 UI 새로고침이나 추가 로직 수행
-            },
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 4,
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                  child: LinearProgressIndicator(
-                    value: todayStatus.completionRate,
-                    backgroundColor: Colors.grey[300],
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                    minHeight: 8,
+          // 복약그룹 헤더
+          Text(medicationData['group_name'] as String, style: AppTextStyles.subtitle),
+          
+          // 복약 패턴별 섹션
+          ...(medicationData['dosage_patterns'] as List<Map<String, dynamic>>).map((pattern) {
+            return Column(
+              children: [
+                // 패턴 헤더
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      Text(
+                        '${pattern['pattern']} (총 ${pattern['dosage_count']}개)',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        '${((pattern['completion_rate'] as num) * 100).toInt()}% 완료',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  '${(todayStatus.completionRate * 100).toInt()}%',
-                  style: AppTextStyles.caption,
-                  textAlign: TextAlign.center,
+
+                // 약물 그리드
+                MedicationGridWidget(
+                  groupId: medicationData['group_id'] as String,
+                  cycleId: 1,
+                  dosagePattern: pattern['pattern'] as String,
+                  medications: (pattern['medications'] as List<dynamic>).map((med) => PillData(
+                    name: med['name'] as String,
+                    color: Color(int.parse(med['color'] as String)),
+                    shape: med['shape'] as String,
+                    medicationDetailId: med['medicationDetailId'] as int,
+                    status: med['status'] as String?,
+                  )).toList(),
+                  columnsPerRow: 6,
+                  onRecordSubmitted: (selectedMedications, action) {
+                    print('기록 완료: ${selectedMedications.length}개 약물, 액션: ${action.displayName}');
+                  },
                 ),
-              ),
-            ],
+
+                // 구분선 (마지막 패턴이 아닌 경우에만 표시)
+                if (pattern != (medicationData['dosage_patterns'] as List).last)
+                  Divider(color: Colors.grey[200], height: 24),
+              ],
+            );
+          }).toList(),
+
+          // 전체 진행률
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                    child: LinearProgressIndicator(
+                      value: medicationData['total_completion_rate'] as double,
+                      backgroundColor: Colors.grey[300],
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                      minHeight: 8,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    '${((medicationData['total_completion_rate'] as double) * 100).toInt()}%',
+                    style: AppTextStyles.caption,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 8),
+
+          // 액션 버튼들
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -678,12 +811,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildScheduleContent(dynamic item) {
     switch (item.type) {
-      case ScheduleType.medication:
-        return _buildMedicationContent(item);
-      case ScheduleType.hospital:
-        return _buildHospitalContent(item);
       case ScheduleType.prescription:
         return _buildPrescriptionContent(item);
+      case ScheduleType.hospital:
+        return _buildHospitalContent(item);
+      case ScheduleType.medication:
+        return _buildMedicationContent(item);
+      case ScheduleType.stock:
+        return _buildStockContent(item);
+      case ScheduleType.record:
+        return _buildRecordContent(item);
+      case ScheduleType.goal:
+        return _buildGoalContent(item);
       default:
         return _buildDefaultContent(item);
     }
@@ -737,44 +876,180 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildPrescriptionContent(dynamic item) {
-    return Row(
-      children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            color: Colors.orange.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(30),
+    final prescriptionInfo = item.additionalData?['prescriptionInfo'];
+    final hospital = prescriptionInfo?['hospitalName'] ?? '병원 정보 없음';
+    final doctor = prescriptionInfo?['doctorName'] ?? '의사 정보 없음';
+    final prescriptionId = prescriptionInfo?['prescriptionId'] ?? '-';
+    final prescriptionDate = prescriptionInfo?['prescriptionDate'] != null 
+      ? DateFormat('yyyy-MM-dd').format(DateTime.parse(prescriptionInfo['prescriptionDate']))
+      : '날짜 정보 없음';
+    final status = prescriptionInfo?['status'] ?? 'EXPIRED';
+
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: Offset(0, 2),
           ),
-          child: Icon(Icons.receipt_long, color: Colors.orange, size: 28),
-        ),
-        SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "처방전 만료 예정",
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      hospital,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      doctor,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "미리 예약을 진행해주세요",
-                style: TextStyle(color: Colors.grey[600], fontSize: 13),
+              _buildStatusChip(status),
+            ],
+          ),
+          SizedBox(height: 12),
+          Divider(color: Colors.grey[200]),
+          SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '처방전 ID',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    prescriptionId,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    '처방일',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    prescriptionDate,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            // 예약 페이지로 이동
-          },
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          ),
-          child: Text("예약하기", style: TextStyle(fontSize: 12)),
-        ),
-      ],
+          if (_shouldShowRenewalButton(status)) ...[
+            SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // 처방전 갱신 페이지로 이동
+                  Navigator.pushNamed(context, '/prescription-renewal');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text('처방전 갱신하기'),
+              ),
+            ),
+          ],
+        ],
+      ),
     );
+  }
+
+  Widget _buildStatusChip(String status) {
+    Color backgroundColor;
+    Color textColor;
+    String statusText;
+
+    switch (status.toUpperCase()) {
+      case 'ACTIVE':
+        backgroundColor = Colors.green[100]!;
+        textColor = Colors.green[800]!;
+        statusText = '활성';
+        break;
+      case 'NEEDS_RENEWAL':
+        backgroundColor = Colors.orange[100]!;
+        textColor = Colors.orange[800]!;
+        statusText = '갱신필요';
+        break;
+      case 'EXPIRED':
+        backgroundColor = Colors.red[100]!;
+        textColor = Colors.red[800]!;
+        statusText = '만료';
+        break;
+      default:
+        backgroundColor = Colors.grey[100]!;
+        textColor = Colors.grey[800]!;
+        statusText = '알 수 없음';
+    }
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        statusText,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  bool _shouldShowRenewalButton(String status) {
+    return status.toUpperCase() == 'NEEDS_RENEWAL' || status.toUpperCase() == 'EXPIRED';
   }
 
   Widget _buildDefaultContent(dynamic item) {
@@ -1007,6 +1282,226 @@ class _HomeScreenState extends State<HomeScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => BasicInfoScreen(),
+    );
+  }
+
+  Widget _buildStockContent(ScheduleItem item) {
+    final medicationInfo = item.additionalData?['medicationInfo'];
+    final medicationName = medicationInfo?['medicationName'] ?? '약품명 없음';
+    final remainingQuantity = medicationInfo?['remainingQuantity'] ?? 0;
+    final dailyDosage = medicationInfo?['dailyDosage'] ?? 0;
+    final urgencyLevel = medicationInfo?['urgencyLevel'] ?? 'LOW';
+
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: _getUrgencyColor(urgencyLevel).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Icon(
+              Icons.inventory_2,
+              color: _getUrgencyColor(urgencyLevel),
+              size: 28,
+            ),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  medicationName,
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  '남은 수량: $remainingQuantity정 (${remainingQuantity ~/ dailyDosage}일분)',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+          _buildUrgencyChip(urgencyLevel),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecordContent(ScheduleItem item) {
+    final recordInfo = item.additionalData?['recordInfo'];
+    final medicationName = recordInfo?['medicationName'] ?? '약품명 없음';
+    final missedTime = recordInfo?['missedTime'] ?? '';
+    final quantity = recordInfo?['quantity'] ?? 0;
+    final recordType = recordInfo?['recordType'] ?? 'MISSING';
+
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.orange.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Icon(Icons.assignment_late, color: Colors.orange, size: 28),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  medicationName,
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  '$missedTime - ${quantity}정',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // 기록 확인 페이지로 이동
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.orange,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ),
+            child: Text('확인하기', style: TextStyle(fontSize: 12)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGoalContent(ScheduleItem item) {
+    final goalInfo = item.additionalData?['goalInfo'] ?? 
+                    item.additionalData?['improvementInfo'];
+    final currentRate = goalInfo?['currentRate'] ?? 0;
+    final targetRate = goalInfo?['targetRate'] ?? 0;
+    final suggestions = goalInfo?['suggestions'] as List<dynamic>? ?? [];
+
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Icon(Icons.trending_up, color: Colors.blue, size: 28),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '목표 달성률: $currentRate%',
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      '목표: $targetRate%',
+                      style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (suggestions.isNotEmpty) ...[
+            SizedBox(height: 12),
+            Text(
+              '개선 제안',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[700],
+              ),
+            ),
+            SizedBox(height: 8),
+            ...suggestions.take(2).map((suggestion) => Padding(
+              padding: EdgeInsets.only(bottom: 4),
+              child: Row(
+                children: [
+                  Icon(Icons.arrow_right, size: 16, color: Colors.blue),
+                  SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      suggestion.toString(),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                  ),
+                ],
+              ),
+            )),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Color _getUrgencyColor(String urgencyLevel) {
+    switch (urgencyLevel.toUpperCase()) {
+      case 'HIGH':
+        return Colors.red;
+      case 'MEDIUM':
+        return Colors.orange;
+      case 'LOW':
+        return Colors.green;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  Widget _buildUrgencyChip(String urgencyLevel) {
+    final color = _getUrgencyColor(urgencyLevel);
+    String text;
+    switch (urgencyLevel.toUpperCase()) {
+      case 'HIGH':
+        text = '긴급';
+        break;
+      case 'MEDIUM':
+        text = '주의';
+        break;
+      case 'LOW':
+        text = '양호';
+        break;
+      default:
+        text = '일반';
+    }
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: color,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:yakunstructuretest/core/api/medication_api_service.dart';
 import 'package:yakunstructuretest/data/models/check_dosage_models.dart';
 import 'package:yakunstructuretest/data/models/medication_group_model.dart';
 import 'package:yakunstructuretest/data/models/medication_item.dart' hide NextDosageData;
+import 'package:yakunstructuretest/presentation/screens/home/PillGrid.dart';
 
 
 
@@ -419,21 +420,4 @@ class TodayMedicationStatus {
   });
 
   int get total => taken + missed + pending;
-}
-
-// === PillData 모델 (기존 PillGrid.dart에서 이동) ===
-class PillData {
-  final String name;
-  final Color color;
-  final String shape;
-  final int medicationDetailId;
-  final String? imageUrl;
-
-  PillData({
-    required this.name,
-    required this.color,
-    required this.shape,
-    required this.medicationDetailId,
-    this.imageUrl,
-  });
 }
