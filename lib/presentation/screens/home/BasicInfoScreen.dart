@@ -36,7 +36,7 @@ class BasicInfoScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '기본 정보 관리',
+                      '기본 정보 등록',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -66,6 +66,7 @@ class BasicInfoScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
+                  // 상단 3개 버튼
                   Row(
                     children: [
                       Expanded(
@@ -75,7 +76,7 @@ class BasicInfoScreen extends StatelessWidget {
                           '자주 가는 병원 정보',
                           Icons.local_hospital,
                           Color(0xFF4CAF50),
-                              () => Navigator.pushNamed(context, '/register-hospital'),
+                          () => Navigator.pushNamed(context, '/register-hospital'),
                         ),
                       ),
                       SizedBox(width: 12),
@@ -83,36 +84,50 @@ class BasicInfoScreen extends StatelessWidget {
                         child: _buildBasicInfoTile(
                           context,
                           '질병/증상 등록',
-                          '진단받은 질병/나타나는 증상 정보',
+                          '진단명/나타나는 증상',
                           Icons.account_tree_outlined,
                           Color(0xFFE91E63),
-                              () => Navigator.pushNamed(context, '/register-illness'),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildBasicInfoTile(
-                          context,
-                          '의료 정보 등록',
-                          '연관된 병원 + 질병/증상 정보',
-                          Icons.psychology,
-                          Color(0xFFFF9800),
-                              () => Navigator.pushNamed(context, '/register-medical-info'),
+                          () => Navigator.pushNamed(context, '/register-illness'),
                         ),
                       ),
                       SizedBox(width: 12),
                       Expanded(
                         child: _buildBasicInfoTile(
                           context,
-                          '복약 그룹 설정',
-                          '복약 단위 설정(저녁약, 혈압약 등)',
+                          '처방전 등록',
+                          '처방전 정보',
+                          Icons.description_outlined,
+                          Color(0xFF2196F3),
+                          () => Navigator.pushNamed(context, '/register-prescription'),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  // 하단 2개 버튼
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: _buildBasicInfoTile(
+                          context,
+                          '의료 정보 등록',
+                          '병원 + 질병/증상 + 처방전까지 연관 정보 원터치 등록',
+                          Icons.psychology,
+                          Color(0xFFFF9800),
+                          () => Navigator.pushNamed(context, '/register-medical-info'),
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        flex: 1,
+                        child: _buildBasicInfoTile(
+                          context,
+                          '복약 그룹 등록',
+                          '복약 단위 설정',
                           Icons.medical_information_outlined,
                           Color(0xFF9C27B0),
-                              () => Navigator.pushNamed(context, '/register-medication-group'),
+                          () => Navigator.pushNamed(context, '/register-medication-group'),
                         ),
                       ),
                     ],
@@ -167,7 +182,7 @@ class BasicInfoScreen extends StatelessWidget {
         onTap(); // 해당 페이지로 이동
       },
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: color.withOpacity(0.1),
           borderRadius: BorderRadius.circular(16),
@@ -191,20 +206,20 @@ class BasicInfoScreen extends StatelessWidget {
                 size: 20,
               ),
             ),
-            SizedBox(height: 12),
+            SizedBox(height: 8),
             Text(
               title,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 13,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF2D2D2D),
               ),
             ),
-            SizedBox(height: 4),
+            SizedBox(height: 2),
             Text(
               subtitle,
               style: TextStyle(
-                fontSize: 11,
+                fontSize: 10,
                 color: Color(0xFF666666),
                 height: 1.3,
               ),
